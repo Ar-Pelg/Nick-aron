@@ -47,14 +47,16 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
       antialias: true, 
       alpha: false, 
       powerPreference: "high-performance",
-      precision: "mediump"
+      precision: "mediump",
+      stencil: false,
+      depth: true
     });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     
-    // RESTORED: Shadows enabled for better visuals
+    // OPTIMIZATION: Use BasicShadowMap or reduce map size if standard is too heavy
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
     renderer.shadowMap.autoUpdate = true;
     
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -69,15 +71,17 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     dirLight.position.set(-30, 60, -30);
     dirLight.castShadow = true;
     
-    // Shadow optimization
-    dirLight.shadow.mapSize.width = 1024; 
-    dirLight.shadow.mapSize.height = 1024;
+    // OPTIMIZATION: Reduced shadow map size for performance (512 vs 1024)
+    dirLight.shadow.mapSize.width = 512; 
+    dirLight.shadow.mapSize.height = 512;
     dirLight.shadow.camera.near = 10;
     dirLight.shadow.camera.far = 200;
     dirLight.shadow.camera.left = -50;
     dirLight.shadow.camera.right = 50;
     dirLight.shadow.camera.top = 50;
     dirLight.shadow.camera.bottom = -50;
+    // OPTIMIZATION: bias to reduce artifacts with lower res shadow map
+    dirLight.shadow.bias = -0.0005;
     scene.add(dirLight);
 
     const streetGlow = new THREE.DirectionalLight(0xffaa00, 0.3);
@@ -113,7 +117,6 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
       waterMaterial.userData.shader = shader;
     };
 
-    // RESTORED: MeshStandardMaterial for quality
     const materials = {
       klinkers: new THREE.MeshStandardMaterial({ color: 0x5D4037, roughness: 0.9, bumpScale: 0.05 }), 
       hardsteen: new THREE.MeshStandardMaterial({ color: 0x3E2723, roughness: 0.8 }), 
@@ -157,8 +160,8 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     // 6. Geometry & Instancing setup
     const canalLength = 260;
     
-    // More segments for smoother water
-    const canalGeo = new THREE.PlaneGeometry(12, canalLength, 32, 128);
+    // OPTIMIZATION: Reduced segments for water plane (was 32, 128)
+    const canalGeo = new THREE.PlaneGeometry(12, canalLength, 12, 64);
     const canal = new THREE.Mesh(canalGeo, materials.water);
     canal.rotation.x = -Math.PI / 2;
     scene.add(canal);
@@ -179,15 +182,15 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     createStaticStreet(-1);
 
     // --- INSTANCED MESHES ---
-    // Higher counts restored
+    // OPTIMIZATION: Adjusted max counts slightly
     const maxHouses = 250;
     const maxWindows = 6000; 
     const maxTrees = 400;    
     const maxPoles = 600;    
     const maxBoats = 40;
-    const maxLights = 2000;
+    const maxLights = 1500; // Reduced from 2000
     const maxLanterns = 400; 
-    const maxBikes = 1500; 
+    const maxBikes = 800; // Reduced from 1500, still plenty visually
 
     const dummy = new THREE.Object3D();
 
@@ -202,10 +205,12 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     const trimMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.15, 1), materials.gableTrim, maxHouses * 4);
     scene.add(trimMesh);
 
+    // OPTIMIZATION: Reduced radial segments
     const spoutGeo = new THREE.CylinderGeometry(0.1, 0.8, 1, 4, 1);
     spoutGeo.rotateY(Math.PI/4);
     const spoutMesh = new THREE.InstancedMesh(spoutGeo, materials.brickBase, maxHouses);
-    spoutMesh.castShadow = true;
+    // OPTIMIZATION: Disabled shadow casting on small spouts
+    spoutMesh.castShadow = false;
     scene.add(spoutMesh);
 
     const frameMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.8, 1.4, 0.1), materials.woodCream, maxWindows);
@@ -215,25 +220,30 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     const litGlassMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.65, 1.25, 0.05), materials.glassLit, maxWindows);
     scene.add(litGlassMesh);
 
-    const lightSphereGeo = new THREE.SphereGeometry(0.08, 6, 6); 
+    // OPTIMIZATION: Low poly sphere (4, 4)
+    const lightSphereGeo = new THREE.SphereGeometry(0.08, 4, 4); 
     const stringLightMesh = new THREE.InstancedMesh(lightSphereGeo, materials.stringLight, maxLights);
     scene.add(stringLightMesh);
 
     const beamMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.1, 0.1, 1.2), materials.woodDark, maxHouses);
     scene.add(beamMesh);
 
-    const treeTrunkMesh = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.15, 0.2, 3, 6), materials.woodDark, maxTrees);
+    // OPTIMIZATION: Reduced segments
+    const treeTrunkMesh = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.15, 0.2, 3, 5), materials.woodDark, maxTrees);
     scene.add(treeTrunkMesh);
     const treeLeavesMesh = new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1.5), materials.leaves, maxTrees);
     treeLeavesMesh.castShadow = true;
     scene.add(treeLeavesMesh);
     
-    const poleGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.8, 8); 
+    // OPTIMIZATION: Reduced segments (5)
+    const poleGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.8, 5); 
     const poleMesh = new THREE.InstancedMesh(poleGeo, materials.amsterdammertje, maxPoles);
-    poleMesh.castShadow = true;
+    // OPTIMIZATION: Disabled shadow casting
+    poleMesh.castShadow = false;
     scene.add(poleMesh);
 
-    const lanternPostGeo = new THREE.CylinderGeometry(0.1, 0.12, 3.5, 6); 
+    // OPTIMIZATION: Reduced segments
+    const lanternPostGeo = new THREE.CylinderGeometry(0.1, 0.12, 3.5, 5); 
     const lanternHeadGeo = new THREE.BoxGeometry(0.4, 0.6, 0.4);
     const lanternMesh = new THREE.InstancedMesh(lanternPostGeo, materials.iron, maxLanterns);
     const lanternHeadMesh = new THREE.InstancedMesh(lanternHeadGeo, materials.iron, maxLanterns);
@@ -245,15 +255,16 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     const dockedCoverMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1.4, 0.2, 3.0), materials.woodWarm, maxBoats); 
     scene.add(dockedCoverMesh);
 
-    const bikeGeo = new THREE.TorusGeometry(0.35, 0.03, 4, 12); 
+    // OPTIMIZATION: Low poly Torus (6, 4)
+    const bikeGeo = new THREE.TorusGeometry(0.35, 0.03, 6, 4); 
     const bikeMesh = new THREE.InstancedMesh(bikeGeo, materials.bikeFrame, maxBikes * 2);
     scene.add(bikeMesh);
     
-    const bikeFrameGeo = new THREE.CylinderGeometry(0.04, 0.04, 1.2, 6); 
+    const bikeFrameGeo = new THREE.CylinderGeometry(0.04, 0.04, 1.2, 4); 
     const bikeFrameMesh = new THREE.InstancedMesh(bikeFrameGeo, materials.bikeFrame, maxBikes);
     scene.add(bikeFrameMesh);
 
-    const bikeHandleGeo = new THREE.TorusGeometry(0.25, 0.02, 4, 6, Math.PI); 
+    const bikeHandleGeo = new THREE.TorusGeometry(0.25, 0.02, 4, 4, Math.PI); 
     const bikeHandleMesh = new THREE.InstancedMesh(bikeHandleGeo, materials.chrome, maxBikes);
     scene.add(bikeHandleMesh);
 
@@ -530,7 +541,8 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     const createSloop = () => {
        const g = new THREE.Group();
 
-       const hullGeo = new THREE.CylinderGeometry(1.4, 1.2, 9.5, 24, 1, false); 
+       // OPTIMIZATION: Reduced segments
+       const hullGeo = new THREE.CylinderGeometry(1.4, 1.2, 9.5, 12, 1, false); 
        hullGeo.scale(1, 1, 0.45); 
        const hull = new THREE.Mesh(hullGeo, materials.boatHull);
        hull.rotation.set(Math.PI/2, 0, 0); 
@@ -597,7 +609,9 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
        const rearDeck = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.1, 1.5), materials.boatHull);
        rearDeck.position.set(0, 0.8, -3.5);
        g.add(rearDeck);
-       const wheel = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.05, 6, 12), materials.iron);
+       
+       // OPTIMIZATION: Low poly torus
+       const wheel = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.05, 6, 4), materials.iron);
        wheel.position.set(0, 1.5, -3.8); wheel.rotation.x = -0.2; g.add(wheel);
 
        const stripe = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.15, 8.6), materials.touristOrange);
@@ -608,10 +622,10 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
        const spot = new THREE.SpotLight(0xffffee, 2.0, 15, 0.5, 0.5, 1);
        spot.position.set(0, 1.0, 4.0); spot.target.position.set(0, 0, 10); g.add(spot); g.add(spot.target);
 
-       const chimney = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 1.0), materials.boatWood);
+       const chimney = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 1.0, 6), materials.boatWood);
        chimney.position.set(0, 2.7, -3.0); g.add(chimney);
 
-       const flagPole = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.2), materials.iron);
+       const flagPole = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.2, 4), materials.iron);
        flagPole.position.set(0, 2.8, -3.0); 
        flagPole.rotation.x = -0.1;
        g.add(flagPole);
