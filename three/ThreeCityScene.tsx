@@ -17,12 +17,14 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     let isVisible = false;
     let currentScroll = 0;
     
+    // Clock for smooth delta-time based animation
+    const clock = new THREE.Clock();
+    
     // Subscribe to scroll value
     const unsubscribe = scrollProgress.on("change", (latest) => {
       currentScroll = latest;
     });
 
-    // Setup Visibility Observer to pause rendering when off-screen
     const observer = new IntersectionObserver(
       ([entry]) => {
         isVisible = entry.isIntersecting;
@@ -38,25 +40,26 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     scene = new THREE.Scene();
     const skyColor = 0x171717; 
     scene.background = new THREE.Color(skyColor); 
-    scene.fog = new THREE.FogExp2(skyColor, 0.02);
+    scene.fog = new THREE.FogExp2(skyColor, 0.025);
 
-    camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 150); 
+    camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 120); 
     camera.position.set(0, 2, 0); 
 
     renderer = new THREE.WebGLRenderer({ 
-      antialias: true, 
+      antialias: false, // Keeping false for performance
       alpha: false, 
       powerPreference: "high-performance",
-      precision: "mediump",
+      precision: "mediump", // Mediump is usually enough and faster
       stencil: false,
       depth: true
     });
     renderer.setSize(width, height);
+    // Cap pixel ratio to 1.5 to prevent massive lag on high-DPI retina screens
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     
-    // OPTIMIZATION: Use BasicShadowMap or reduce map size if standard is too heavy
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
+    // OPTIMIZATION: Switched to PCFShadowMap (faster than PCFSoftShadowMap)
+    renderer.shadowMap.type = THREE.PCFShadowMap; 
     renderer.shadowMap.autoUpdate = true;
     
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -71,16 +74,15 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     dirLight.position.set(-30, 60, -30);
     dirLight.castShadow = true;
     
-    // OPTIMIZATION: Reduced shadow map size for performance (512 vs 1024)
-    dirLight.shadow.mapSize.width = 512; 
-    dirLight.shadow.mapSize.height = 512;
+    // Shadow optimization: Smaller map is often sufficient for this art style
+    dirLight.shadow.mapSize.width = 1024; 
+    dirLight.shadow.mapSize.height = 1024;
     dirLight.shadow.camera.near = 10;
-    dirLight.shadow.camera.far = 200;
-    dirLight.shadow.camera.left = -50;
-    dirLight.shadow.camera.right = 50;
-    dirLight.shadow.camera.top = 50;
-    dirLight.shadow.camera.bottom = -50;
-    // OPTIMIZATION: bias to reduce artifacts with lower res shadow map
+    dirLight.shadow.camera.far = 150;
+    dirLight.shadow.camera.left = -40;
+    dirLight.shadow.camera.right = 40;
+    dirLight.shadow.camera.top = 40;
+    dirLight.shadow.camera.bottom = -40;
     dirLight.shadow.bias = -0.0005;
     scene.add(dirLight);
 
@@ -88,8 +90,7 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     streetGlow.position.set(20, 10, 10);
     scene.add(streetGlow);
 
-    // 5. Materials & Shader Injection for Water
-    
+    // 5. Materials
     const waterMaterial = new THREE.MeshStandardMaterial({ 
       color: 0x0055aa, 
       roughness: 0.02, 
@@ -108,9 +109,8 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
         '#include <begin_vertex>',
         `
         #include <begin_vertex>
-        float wave = sin(position.y * 0.15 + uTime * 0.8) * 0.1 + 
-                     cos(position.x * 0.3 + uTime * 0.5) * 0.05 + 
-                     sin(position.y * 0.5 + position.x * 0.5 + uTime) * 0.02;
+        float wave = sin(position.y * 0.2 + uTime * 0.8) * 0.1 + 
+                     cos(position.x * 0.3 + uTime * 0.5) * 0.05;
         transformed.z += wave;
         `
       );
@@ -118,7 +118,7 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     };
 
     const materials = {
-      klinkers: new THREE.MeshStandardMaterial({ color: 0x5D4037, roughness: 0.9, bumpScale: 0.05 }), 
+      klinkers: new THREE.MeshStandardMaterial({ color: 0x5D4037, roughness: 0.9 }), 
       hardsteen: new THREE.MeshStandardMaterial({ color: 0x3E2723, roughness: 0.8 }), 
       water: waterMaterial,
       woodDark: new THREE.MeshStandardMaterial({ color: 0x261612 }), 
@@ -130,7 +130,7 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
       gableTrim: new THREE.MeshStandardMaterial({ color: 0xffecb3 }), 
       glass: new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.0, metalness: 0.9 }),
       glassLit: new THREE.MeshStandardMaterial({ color: 0xffb74d, emissive: 0xff8f00, emissiveIntensity: 2.0 }), 
-      glassRoof: new THREE.MeshStandardMaterial({ color: 0x81D4FA, roughness: 0.0, metalness: 0.9, transparent: true, opacity: 0.3, side: THREE.DoubleSide }),
+      glassRoof: new THREE.MeshStandardMaterial({ color: 0x81D4FA, roughness: 0.1, metalness: 0.8 }),
       iron: new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.6, roughness: 0.4 }),
       chrome: new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.9, roughness: 0.2 }),
       pole: new THREE.MeshStandardMaterial({ color: 0x1f120d }), 
@@ -158,10 +158,9 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     ];
 
     // 6. Geometry & Instancing setup
-    const canalLength = 260;
+    const canalLength = 1600; 
     
-    // OPTIMIZATION: Reduced segments for water plane (was 32, 128)
-    const canalGeo = new THREE.PlaneGeometry(12, canalLength, 12, 64);
+    const canalGeo = new THREE.PlaneGeometry(12, canalLength, 4, 64);
     const canal = new THREE.Mesh(canalGeo, materials.water);
     canal.rotation.x = -Math.PI / 2;
     scene.add(canal);
@@ -182,68 +181,68 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     createStaticStreet(-1);
 
     // --- INSTANCED MESHES ---
-    // OPTIMIZATION: Adjusted max counts slightly
-    const maxHouses = 250;
-    const maxWindows = 6000; 
-    const maxTrees = 400;    
-    const maxPoles = 600;    
-    const maxBoats = 40;
-    const maxLights = 1500; // Reduced from 2000
-    const maxLanterns = 400; 
-    const maxBikes = 800; // Reduced from 1500, still plenty visually
+    // OPTIMIZATION: Reduced limits slightly to save memory/processing
+    const maxHouses = 1600;
+    const maxWindows = 35000; 
+    const maxTrees = 1500;    
+    const maxPoles = 2000;    
+    const maxBoats = 150;
+    const maxLights = 6000;
+    const maxLanterns = 1000; 
+    const maxBikes = 2000;
 
     const dummy = new THREE.Object3D();
 
+    // OPTIMIZATION: Only the main house block needs to cast shadows. 
+    // Gables/details are too expensive for little gain in a dark scene.
     const houseMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), materials.brickBase, maxHouses);
-    houseMesh.castShadow = true; houseMesh.receiveShadow = true;
+    houseMesh.castShadow = true; 
+    houseMesh.receiveShadow = true;
     scene.add(houseMesh);
 
     const gableBlockMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), materials.brickBase, maxHouses * 4); 
-    gableBlockMesh.castShadow = true;
+    gableBlockMesh.castShadow = false; // Disable shadow casting for details
+    gableBlockMesh.receiveShadow = true;
     scene.add(gableBlockMesh);
     
     const trimMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 0.15, 1), materials.gableTrim, maxHouses * 4);
+    trimMesh.castShadow = false;
     scene.add(trimMesh);
 
-    // OPTIMIZATION: Reduced radial segments
-    const spoutGeo = new THREE.CylinderGeometry(0.1, 0.8, 1, 4, 1);
+    const spoutGeo = new THREE.CylinderGeometry(0.1, 0.8, 1, 3, 1);
     spoutGeo.rotateY(Math.PI/4);
     const spoutMesh = new THREE.InstancedMesh(spoutGeo, materials.brickBase, maxHouses);
-    // OPTIMIZATION: Disabled shadow casting on small spouts
     spoutMesh.castShadow = false;
     scene.add(spoutMesh);
 
     const frameMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.8, 1.4, 0.1), materials.woodCream, maxWindows);
+    frameMesh.castShadow = false; 
     scene.add(frameMesh);
     const glassMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.65, 1.25, 0.05), materials.glass, maxWindows);
     scene.add(glassMesh);
     const litGlassMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.65, 1.25, 0.05), materials.glassLit, maxWindows);
     scene.add(litGlassMesh);
 
-    // OPTIMIZATION: Low poly sphere (4, 4)
-    const lightSphereGeo = new THREE.SphereGeometry(0.08, 4, 4); 
+    const lightSphereGeo = new THREE.SphereGeometry(0.08, 4, 3); 
     const stringLightMesh = new THREE.InstancedMesh(lightSphereGeo, materials.stringLight, maxLights);
     scene.add(stringLightMesh);
 
     const beamMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(0.1, 0.1, 1.2), materials.woodDark, maxHouses);
     scene.add(beamMesh);
 
-    // OPTIMIZATION: Reduced segments
-    const treeTrunkMesh = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.15, 0.2, 3, 5), materials.woodDark, maxTrees);
+    const treeTrunkMesh = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.15, 0.2, 3, 4), materials.woodDark, maxTrees);
     scene.add(treeTrunkMesh);
     const treeLeavesMesh = new THREE.InstancedMesh(new THREE.DodecahedronGeometry(1.5), materials.leaves, maxTrees);
-    treeLeavesMesh.castShadow = true;
+    treeLeavesMesh.castShadow = false; // Complex geometry shadows are heavy
+    treeLeavesMesh.receiveShadow = true;
     scene.add(treeLeavesMesh);
     
-    // OPTIMIZATION: Reduced segments (5)
-    const poleGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.8, 5); 
+    const poleGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.8, 4); 
     const poleMesh = new THREE.InstancedMesh(poleGeo, materials.amsterdammertje, maxPoles);
-    // OPTIMIZATION: Disabled shadow casting
     poleMesh.castShadow = false;
     scene.add(poleMesh);
 
-    // OPTIMIZATION: Reduced segments
-    const lanternPostGeo = new THREE.CylinderGeometry(0.1, 0.12, 3.5, 5); 
+    const lanternPostGeo = new THREE.CylinderGeometry(0.1, 0.12, 3.5, 4); 
     const lanternHeadGeo = new THREE.BoxGeometry(0.4, 0.6, 0.4);
     const lanternMesh = new THREE.InstancedMesh(lanternPostGeo, materials.iron, maxLanterns);
     const lanternHeadMesh = new THREE.InstancedMesh(lanternHeadGeo, materials.iron, maxLanterns);
@@ -251,20 +250,20 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
     scene.add(lanternHeadMesh);
     
     const dockedHullMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1.6, 0.5, 4.0), materials.boatHull, maxBoats);
+    dockedHullMesh.castShadow = false;
     scene.add(dockedHullMesh);
     const dockedCoverMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1.4, 0.2, 3.0), materials.woodWarm, maxBoats); 
     scene.add(dockedCoverMesh);
 
-    // OPTIMIZATION: Low poly Torus (6, 4)
-    const bikeGeo = new THREE.TorusGeometry(0.35, 0.03, 6, 4); 
+    const bikeGeo = new THREE.TorusGeometry(0.35, 0.03, 5, 3); 
     const bikeMesh = new THREE.InstancedMesh(bikeGeo, materials.bikeFrame, maxBikes * 2);
     scene.add(bikeMesh);
     
-    const bikeFrameGeo = new THREE.CylinderGeometry(0.04, 0.04, 1.2, 4); 
+    const bikeFrameGeo = new THREE.CylinderGeometry(0.04, 0.04, 1.2, 3); 
     const bikeFrameMesh = new THREE.InstancedMesh(bikeFrameGeo, materials.bikeFrame, maxBikes);
     scene.add(bikeFrameMesh);
 
-    const bikeHandleGeo = new THREE.TorusGeometry(0.25, 0.02, 4, 4, Math.PI); 
+    const bikeHandleGeo = new THREE.TorusGeometry(0.25, 0.02, 3, 3, Math.PI); 
     const bikeHandleMesh = new THREE.InstancedMesh(bikeHandleGeo, materials.chrome, maxBikes);
     scene.add(bikeHandleMesh);
 
@@ -295,7 +294,7 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
 
     const populateSide = (sx: number) => {
         let cz = -canalLength/2;
-        while(cz < canalLength/2) {
+        while(cz < canalLength/2 && houseIdx < maxHouses) {
             const w = 2.0 + Math.random() * 1.8;
             const h = 7.5 + Math.random() * 4.5; 
             const depth = 6;
@@ -379,14 +378,16 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
                     if(sx > 0) { wxWorld = x - winDepthOffset; wzWorld = z + wxRel; dummy.rotation.set(0, -Math.PI/2, 0); } 
                     else { wxWorld = x + winDepthOffset; wzWorld = z - wxRel; dummy.rotation.set(0, Math.PI/2, 0); }
 
-                    dummy.position.set(wxWorld, wy, wzWorld);
-                    dummy.scale.set(1, 1, 1);
-                    dummy.updateMatrix();
-                    frameMesh.setMatrixAt(frameIdx++, dummy.matrix);
+                    if(frameIdx < maxWindows) {
+                        dummy.position.set(wxWorld, wy, wzWorld);
+                        dummy.scale.set(1, 1, 1);
+                        dummy.updateMatrix();
+                        frameMesh.setMatrixAt(frameIdx++, dummy.matrix);
 
-                    const isLit = Math.random() > 0.5;
-                    if(isLit) { litGlassMesh.setMatrixAt(litIdx++, dummy.matrix); } 
-                    else { glassMesh.setMatrixAt(glassIdx++, dummy.matrix); }
+                        const isLit = Math.random() > 0.5;
+                        if(isLit) { litGlassMesh.setMatrixAt(litIdx++, dummy.matrix); } 
+                        else { glassMesh.setMatrixAt(glassIdx++, dummy.matrix); }
+                    }
                 }
             }
             houseIdx++;
@@ -413,11 +414,13 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
                         const lx = tx + (Math.random()-0.5)*1.5;
                         const ly = 3.5 + (Math.random()*1.5);
                         const lz = z + (Math.random()-0.5)*1.5;
-                        dummy.position.set(lx, ly, lz);
-                        dummy.scale.set(0.6, 0.6, 0.6); 
-                        dummy.rotation.set(0,0,0);
-                        dummy.updateMatrix();
-                        stringLightMesh.setMatrixAt(lightIdx++, dummy.matrix);
+                        if(lightIdx < maxLights) {
+                            dummy.position.set(lx, ly, lz);
+                            dummy.scale.set(0.6, 0.6, 0.6); 
+                            dummy.rotation.set(0,0,0);
+                            dummy.updateMatrix();
+                            stringLightMesh.setMatrixAt(lightIdx++, dummy.matrix);
+                        }
                      }
                  });
              }
@@ -434,15 +437,17 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
                     dummy.updateMatrix();
                     lanternHeadMesh.setMatrixAt(lanternIdx++, dummy.matrix);
 
-                    dummy.position.set(lx, 3.6, z);
-                    dummy.scale.set(1.5, 1.5, 1.5);
-                    dummy.updateMatrix();
-                    stringLightMesh.setMatrixAt(lightIdx++, dummy.matrix);
+                    if(lightIdx < maxLights) {
+                        dummy.position.set(lx, 3.6, z);
+                        dummy.scale.set(1.5, 1.5, 1.5);
+                        dummy.updateMatrix();
+                        stringLightMesh.setMatrixAt(lightIdx++, dummy.matrix);
+                    }
                 });
              }
          }
 
-         if(z % 3 === 0) { 
+         if(z % 3 === 0 && poleIdx < maxPoles) { 
            [-6.4, 6.4].forEach(px => {
                dummy.position.set(px, 0.4, z); dummy.scale.set(1,1,1); dummy.rotation.set(0,0,0); dummy.updateMatrix(); poleMesh.setMatrixAt(poleIdx++, dummy.matrix);
            });
@@ -552,11 +557,14 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
 
        const floor = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.1, 8.0), materials.boatInside); 
        floor.position.y = 0.6;
+       floor.castShadow = false; // Internal details don't need shadows
+       floor.receiveShadow = true;
        g.add(floor);
 
        const roofGeo = new THREE.BoxGeometry(2.0, 0.1, 6.0);
        const roof = new THREE.Mesh(roofGeo, materials.boatWood);
        roof.position.set(0, 2.2, 0.5);
+       roof.castShadow = true;
        g.add(roof);
 
        const glassPanelGeo = new THREE.BoxGeometry(1.8, 0.05, 5.8);
@@ -608,6 +616,7 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
 
        const rearDeck = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.1, 1.5), materials.boatHull);
        rearDeck.position.set(0, 0.8, -3.5);
+       rearDeck.receiveShadow = true;
        g.add(rearDeck);
        
        // OPTIMIZATION: Low poly torus
@@ -658,33 +667,50 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
 
 
     // ANIMATION
-    const startZ = 50; 
-    const endZ = -50;
+    const startZ = 25; 
     
-    let boatZ = startZ; 
-    let targetZ = startZ;
+    // PHYSICS VARS
+    let boatZ = startZ;
+    let speed = 0;
+    const maxSpeed = 2.0; // Reduced speed for a more relaxed cruise feel
 
     const animate = () => {
       animationId = requestAnimationFrame(animate);
 
       // Visibility Check: Stop rendering if off screen
       if (!isVisible) return;
+      
+      // OPTIMIZATION: Delta time for smooth movement regardless of FPS
+      const dt = Math.min(clock.getDelta(), 0.1); // Cap delta to prevent huge jumps
+      const time = clock.getElapsedTime();
 
-      const time = Date.now() * 0.001;
-
-      // GPU Water Update (Uniform update is very cheap)
       if (materials.water.userData.shader) {
           materials.water.userData.shader.uniforms.uTime.value = time;
       }
       
-      targetZ = startZ + currentScroll * (endZ - startZ);
+      // GAS PEDAL LOGIC:
+      const throttle = Math.max(0, currentScroll);
+      const targetSpeed = throttle * maxSpeed;
       
-      // Simpelere lerp voor betere performance
-      boatZ += (targetZ - boatZ) * 0.005; 
+      // Accelerate/Decelerate smoothly using Delta Time
+      // Lowered factor slightly to give the boat more "weight"
+      const accelFactor = 1.0;
+      speed += (targetSpeed - speed) * accelFactor * dt;
+
+      // SAFETY: Clamp speed
+      if(speed < 0.01) speed = 0;
+
+      // Move boat forward based on speed * dt
+      boatZ -= speed * 5.0 * dt; 
+
+      // INFINITE LOOP MECHANIC:
+      if (boatZ < -600) {
+          boatZ += 600;
+      }
 
       if(boatGroup) {
          boatGroup.position.z = boatZ;
-         boatGroup.rotation.x = Math.sin(time) * 0.002 + (targetZ - boatZ) * 0.002; 
+         boatGroup.rotation.x = Math.sin(time) * 0.002 + (speed * 0.005); 
          boatGroup.rotation.z = Math.sin(time * 0.8) * 0.003; 
 
          const camOffsetZ = 7.0; const camOffsetY = 2.4;
@@ -692,9 +718,11 @@ export const ThreeCityScene: React.FC<ThreeCitySceneProps> = ({ scrollProgress }
          const targetCamY = boatGroup.position.y + camOffsetY;
          const targetCamZ = boatGroup.position.z + camOffsetZ;
          
-         camera.position.x += (targetCamX - camera.position.x) * 0.1;
-         camera.position.y += (targetCamY - camera.position.y) * 0.1;
-         camera.position.z = targetCamZ;
+         // Smooth camera follow
+         const lerpFactor = 5.0 * dt;
+         camera.position.x += (targetCamX - camera.position.x) * lerpFactor;
+         camera.position.y += (targetCamY - camera.position.y) * lerpFactor;
+         camera.position.z = targetCamZ; 
          
          camera.lookAt(0, 1.0, boatGroup.position.z - 20); 
       }
