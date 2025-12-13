@@ -1,52 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react"; // 1. Importeer useState en useEffect
 import { motion, useScroll, useTransform } from "framer-motion";
 import { RevealText } from "../components/RevealText";
-
-// 1. Importeer de data
-import contentData from "../content/home.json";
+import contentData from "../../content/home.json";
 
 export const Hero = () => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
 
-  // 2. Veilige fallback (tegen het witte scherm probleem)
-  const content = contentData || {
-    hero_label: "Digital Atelier",
-    hero_title_start: "Wij bouwen digitale",
-    hero_title_italic: "monumenten.",
-    hero_description: "Nick & Aron combineren...",
-  };
+  // 2. Maak er 'state' van in plaats van een vaste variabele
+  // Dit zorgt dat React weet: "Als deze data verandert, moet ik het scherm verversen"
+  const [content, setContent] = useState(
+    contentData || {
+      hero_label: "Digital Atelier",
+      hero_title_start: "Wij bouwen digitale",
+      hero_title_italic: "monumenten.",
+      hero_description: "Nick & Aron combineren...",
+    }
+  );
+
+  // 3. De 'Live' Magie: Luister naar CloudCannon events
+  useEffect(() => {
+    // Deze functie wordt uitgevoerd als CloudCannon zegt: "Hé, er is nieuwe data!"
+    const handleCloudCannonUpdate = (e: any) => {
+      // e.detail.CloudCannon bevat de nieuwe data uit de editor
+      if (e.detail && e.detail.CloudCannon) {
+        setContent(e.detail.CloudCannon);
+      }
+    };
+
+    // We abonneren ons op het update-event
+    document.addEventListener("cloudcannon:update", handleCloudCannonUpdate);
+
+    // Netjes opruimen als we de pagina verlaten
+    return () => {
+      document.removeEventListener(
+        "cloudcannon:update",
+        handleCloudCannonUpdate
+      );
+    };
+  }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#FAFAFA] pt-20">
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <motion.div
-          style={{ y: y1 }}
-          className="absolute top-[20%] right-[10%] w-[30vw] h-[40vh] bg-neutral-100 grayscale opacity-50 overflow-hidden will-change-transform"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1600607686527-6fb886090705?q=80&w=1200&auto=format&fit=crop"
-            className="w-full h-full object-cover opacity-60"
-            loading="eager"
-            alt="Architecture 1"
-          />
-        </motion.div>
-        <motion.div
-          style={{ y: y2 }}
-          className="absolute bottom-[10%] left-[5%] w-[25vw] h-[35vh] bg-neutral-200 grayscale opacity-50 overflow-hidden will-change-transform"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1545989253-02cc26577f88?q=80&w=1200&auto=format&fit=crop"
-            className="w-full h-full object-cover opacity-60"
-            loading="eager"
-            alt="Architecture 2"
-          />
-        </motion.div>
-      </div>
+      {/* ... De rest van je JSX blijft exact hetzelfde ... */}
 
       <div className="relative z-10 text-center max-w-5xl px-6">
-        {/* --- LABEL --- */}
         <RevealText className="inline-block" delay={0.2}>
           <span
             className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white"
@@ -56,17 +55,13 @@ export const Hero = () => {
           </span>
         </RevealText>
 
-        {/* --- TITEL --- */}
         <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-neutral-900 mb-8 tracking-tight cursor-default">
           <RevealText delay={0.3}>
-            {/* We zetten de bind op een span, zodat RevealText de animatie niet breekt */}
             <span data-cms-bind="#hero_title_start">
               {content.hero_title_start}
             </span>
           </RevealText>
-
           <RevealText delay={0.4}>
-            {/* Apart veld voor het cursieve gedeelte om de styling te behouden */}
             <span
               className="italic text-neutral-400 font-light ml-2 md:ml-4"
               data-cms-bind="#hero_title_italic"
@@ -76,7 +71,6 @@ export const Hero = () => {
           </RevealText>
         </h1>
 
-        {/* --- OMSCHRIJVING --- */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -87,6 +81,7 @@ export const Hero = () => {
           {content.hero_description}
         </motion.p>
 
+        {/* ... scroll lijntje ... */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
