@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { RevealText } from "../components/RevealText";
-// Let op: controleer of dit pad klopt (soms is het ../../content)
 import contentData from "../content/home.json";
 
 export const Hero = () => {
@@ -23,25 +22,38 @@ export const Hero = () => {
   const [isEditor, setIsEditor] = useState(false);
 
   useEffect(() => {
-    // 1. Check direct of we in de editor zitten
+    // Functie die checkt of we in de editor zitten
     const checkEditor = () => {
       const inCloudCannon =
         typeof window !== "undefined" && (window as any).CloudCannon;
-      setIsEditor(!!inCloudCannon);
-    };
-    checkEditor();
-
-    // 2. Luister naar live updates
-    const handleCloudCannonUpdate = (e: any) => {
-      if (e.detail && e.detail.CloudCannon) {
-        setContent(e.detail.CloudCannon);
-        setIsEditor(true); // Zeker weten dat we in editor modus gaan bij een update
+      if (inCloudCannon) {
+        setIsEditor(true);
       }
     };
 
+    // 1. Check direct bij laden
+    checkEditor();
+
+    // 2. Probeer het na 100ms en 500ms nog eens (Fix voor race conditions)
+    const timer1 = setTimeout(checkEditor, 100);
+    const timer2 = setTimeout(checkEditor, 500);
+
+    // 3. Luister naar live updates
+    const handleCloudCannonUpdate = (e: any) => {
+      if (e.detail && e.detail.CloudCannon) {
+        setContent(e.detail.CloudCannon);
+        setIsEditor(true); // Forceer editor modus bij update
+      }
+    };
+
+    // Luister naar events (Load is belangrijk!)
+    document.addEventListener("cloudcannon:load", checkEditor);
     document.addEventListener("cloudcannon:update", handleCloudCannonUpdate);
 
     return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      document.removeEventListener("cloudcannon:load", checkEditor);
       document.removeEventListener(
         "cloudcannon:update",
         handleCloudCannonUpdate
@@ -51,7 +63,7 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#FAFAFA] pt-20">
-      {/* BACKGROUND IMAGES (z-0 en pointer-events-none is cruciaal) */}
+      {/* BACKGROUND IMAGES */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <motion.div
           style={{ y: y1 }}
@@ -77,10 +89,13 @@ export const Hero = () => {
         </motion.div>
       </div>
 
-      <div className="relative z-10 text-center max-w-5xl px-6">
+      {/* Change: z-index verhoogd naar z-20 om zeker te zijn dat 
+         het boven alles ligt en klikbaar is 
+      */}
+      <div className="relative z-20 text-center max-w-5xl px-6">
         {/* --- LABEL --- */}
         {isEditor ? (
-          /* EDITOR VERSIE (Simpel, direct klikbaar) */
+          /* EDITOR VERSIE */
           <span
             className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white cursor-text"
             data-cms-bind="#hero_label"
@@ -88,7 +103,7 @@ export const Hero = () => {
             {content.hero_label}
           </span>
         ) : (
-          /* LIVE VERSIE (Met animatie) */
+          /* LIVE VERSIE */
           <RevealText className="inline-block" delay={0.2}>
             <span className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white">
               {content.hero_label}
@@ -99,7 +114,7 @@ export const Hero = () => {
         {/* --- TITEL --- */}
         <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-neutral-900 mb-8 tracking-tight cursor-default">
           {isEditor ? (
-            /* EDITOR VERSIE (Geen RevealText, gewoon spans) */
+            /* EDITOR VERSIE (Platte tekst) */
             <>
               <span data-cms-bind="#hero_title_start">
                 {content.hero_title_start}
@@ -127,7 +142,6 @@ export const Hero = () => {
         </h1>
 
         {/* --- OMSCHRIJVING --- */}
-        {/* Motion.p werkt meestal wel, maar bij twijfel kun je hier ook isEditor checken */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
