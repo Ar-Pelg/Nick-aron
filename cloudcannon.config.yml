@@ -1,18 +1,20 @@
 paths:
-  # Aangepast naar public/uploads zodat Vite je plaatjes kan vinden
   uploads: public/uploads
   static: ""
 
 collections_config:
   pages:
-    # Aangepast: Kijkt nu in de map 'content' in plaats van root
     path: content
-    # Nieuw: Zoek alleen naar JSON bestanden (jouw teksten)
     glob: "**/*.json"
     name: "Pagina's"
     icon: wysiwyg
-    # Nieuw: CloudCannon hoeft hier geen HTML van te bouwen, dat doet Vite
     output: false
+
+    # 👇 DEZE REGEL MISTE!
+    # Dit koppelt je 'home.json' aan je homepage URL.
+    # Zonder dit werkt de Visual Editor niet.
+    url: /
+
     _enabled_editors:
       - visual
       - data
@@ -20,11 +22,12 @@ collections_config:
     disable_add_folder: false
     disable_file_actions: false
 
-# Dit verbergt de technische bestanden uit je bestandsbrowser in CloudCannon
+# Dit zorgt dat die mappen 'sections', 'three' en 'App' verdwijnen uit je lijst
 source_editor:
   ignore:
     - "node_modules"
     - ".git"
+    - "src"
     - "*.tsx"
     - "*.ts"
     - "package.json"
