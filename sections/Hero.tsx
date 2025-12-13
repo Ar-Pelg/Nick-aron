@@ -36,7 +36,10 @@ export const Hero = () => {
 
       <div className="relative z-10 text-center max-w-5xl px-6">
         <RevealText className="inline-block" delay={0.2}>
-          <span className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white">
+          <span
+            className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white"
+            data-cms-bind="#hero_title"
+          >
             {content.hero_title}
           </span>
         </RevealText>
