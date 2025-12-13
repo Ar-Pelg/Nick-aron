@@ -89,14 +89,12 @@ export const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Change: z-index verhoogd naar z-20 om zeker te zijn dat 
-         het boven alles ligt en klikbaar is 
-      */}
       <div className="relative z-20 text-center max-w-5xl px-6">
         {/* --- LABEL --- */}
         {isEditor ? (
           /* EDITOR VERSIE */
           <span
+            suppressContentEditableWarning={true}
             className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white cursor-text"
             data-cms-bind="#hero_label"
           >
@@ -116,10 +114,14 @@ export const Hero = () => {
           {isEditor ? (
             /* EDITOR VERSIE (Platte tekst) */
             <>
-              <span data-cms-bind="#hero_title_start">
+              <span
+                suppressContentEditableWarning={true}
+                data-cms-bind="#hero_title_start"
+              >
                 {content.hero_title_start}
               </span>
               <span
+                suppressContentEditableWarning={true}
                 className="italic text-neutral-400 font-light ml-2 md:ml-4"
                 data-cms-bind="#hero_title_italic"
               >
@@ -142,15 +144,25 @@ export const Hero = () => {
         </h1>
 
         {/* --- OMSCHRIJVING --- */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
-          data-cms-bind="#hero_description"
-        >
-          {content.hero_description}
-        </motion.p>
+        {/* Voor de beschrijving gebruiken we ook de isEditor check om problemen met Motion te voorkomen */}
+        {isEditor ? (
+          <p
+            suppressContentEditableWarning={true}
+            className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
+            data-cms-bind="#hero_description"
+          >
+            {content.hero_description}
+          </p>
+        ) : (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.6 }}
+            className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
+          >
+            {content.hero_description}
+          </motion.p>
+        )}
 
         {/* --- SCROLL LIJN --- */}
         <motion.div
