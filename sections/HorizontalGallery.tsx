@@ -1,8 +1,14 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '../components/Button';
+import { ProjectData } from '../components/ProjectDetail';
 
-export const HorizontalGallery = () => {
+interface HorizontalGalleryProps {
+  projects: ProjectData[];
+  onSelectProject: (project: ProjectData) => void;
+}
+
+export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, onSelectProject }) => {
   const targetRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -10,29 +16,6 @@ export const HorizontalGallery = () => {
   });
 
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-60%"]);
-
-  const projects = [
-    {
-      title: "Rijksmuseum",
-      cat: "Digital Archive",
-      img: "https://images.unsplash.com/photo-1554907984-15263bfd63bd?q=80&w=1200&auto=format&fit=crop"
-    },
-    {
-      title: "Vogue Living",
-      cat: "E-Commerce",
-      img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop"
-    },
-    {
-      title: "Aesop Skin",
-      cat: "Brand Experience",
-      img: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?q=80&w=1200&auto=format&fit=crop"
-    },
-    {
-      title: "Polestar",
-      cat: "Configurator",
-      img: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=1200&auto=format&fit=crop"
-    }
-  ];
 
   return (
     <section ref={targetRef} className="relative h-[300vh] bg-neutral-900 text-white" id="projecten">
@@ -59,6 +42,7 @@ export const HorizontalGallery = () => {
                key={i} 
                className="relative group flex-shrink-0 w-[80vw] md:w-[50vw] h-[70vh] overflow-hidden bg-neutral-800 cursor-pointer"
                data-cursor="Bekijk Case"
+               onClick={() => onSelectProject(project)}
              >
                <img 
                 src={project.img} 
