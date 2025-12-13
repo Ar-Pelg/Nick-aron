@@ -24,6 +24,9 @@
       ]
     },
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noEmit": true,
+    /* Toegevoegd voor je JSON imports: */
+    "resolveJsonModule": true,
+    "esModuleInterop": true
   }
 }
