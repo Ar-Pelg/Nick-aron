@@ -1,18 +1,38 @@
 paths:
-  uploads: uploads
-  static: ''
+  # Aangepast naar public/uploads zodat Vite je plaatjes kan vinden
+  uploads: public/uploads
+  static: ""
+
 collections_config:
   pages:
-    path: ''
+    # Aangepast: Kijkt nu in de map 'content' in plaats van root
+    path: content
+    # Nieuw: Zoek alleen naar JSON bestanden (jouw teksten)
+    glob: "**/*.json"
+    name: "Pagina's"
     icon: wysiwyg
-    url: /[full_slug]/
-    disable_url: false
+    # Nieuw: CloudCannon hoeft hier geen HTML van te bouwen, dat doet Vite
+    output: false
     _enabled_editors:
       - visual
+      - data
     disable_add: false
     disable_add_folder: false
     disable_file_actions: false
+
+# Dit verbergt de technische bestanden uit je bestandsbrowser in CloudCannon
+source_editor:
+  ignore:
+    - "node_modules"
+    - ".git"
+    - "*.tsx"
+    - "*.ts"
+    - "package.json"
+    - "tsconfig.json"
+    - "vite.config.ts"
+
 timezone: Europe/Amsterdam
+
 markdown:
   engine: commonmark
   options:
@@ -23,7 +43,7 @@ markdown:
     spaced_lists: false
     sentence_per_line: false
     gfm: false
-    code_block_fences: '```'
+    code_block_fences: "```"
     escape_snippets_in_code_blocks: false
     treat_indentation_as_code: false
     table: false
