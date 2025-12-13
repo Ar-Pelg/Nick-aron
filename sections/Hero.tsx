@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { RevealText } from "../components/RevealText";
 
 // 1. Importeer de data
-import contentData from "../../content/home.json";
+import contentData from "../content/home.json";
 
 export const Hero = () => {
   const { scrollY } = useScroll();
