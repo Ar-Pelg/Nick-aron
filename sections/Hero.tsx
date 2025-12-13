@@ -8,20 +8,12 @@ export const Hero = () => {
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
 
-  // State voor de content
-  const [content, setContent] = useState(
-    contentData || {
-      hero_label: "Digital Atelier",
-      hero_title_start: "Wij bouwen digitale",
-      hero_title_italic: "monumenten.",
-      hero_description: "Nick & Aron combineren...",
-    }
-  );
-
+  // Initialiseer state
+  const [content, setContent] = useState(contentData);
   const [isEditor, setIsEditor] = useState(false);
 
   useEffect(() => {
-    // 1. Check of we in de editor zitten (voor de weergave van animaties)
+    // 1. Check of we in de editor zitten
     const checkEditor = () => {
       const inCloudCannon =
         typeof window !== "undefined" && (window as any).CloudCannon;
@@ -29,32 +21,40 @@ export const Hero = () => {
         setIsEditor(true);
       }
     };
-    checkEditor();
 
-    // Check nogmaals na een korte tijd (voor de zekerheid)
-    setTimeout(checkEditor, 500);
+    // 2. LIVE UPDATE FUNCTIE
+    const handleUpdate = (e: any) => {
+      // Check in je console (F12) of je dit vuurtje ziet!
+      console.log("🔥 Update ontvangen:", e.detail?.CloudCannon);
 
-    // 2. DIT IS HET BELANGRIJKE STUK VOOR LIVE UPDATES
-    // Deze functie zorgt dat als jij links typt, rechts direct update.
-    const handleCloudCannonUpdate = (e: any) => {
       if (e.detail && e.detail.CloudCannon) {
-        setContent(e.detail.CloudCannon);
+        // TRUCJE: De ... (spread operator) forceert React om te re-renderen
+        setContent({ ...e.detail.CloudCannon });
         setIsEditor(true);
       }
     };
 
-    // We zetten de luisteraar AAN
-    document.addEventListener("cloudcannon:update", handleCloudCannonUpdate);
-    document.addEventListener("cloudcannon:load", checkEditor);
+    // We gebruiken 'window' voor betere betrouwbaarheid
+    window.addEventListener("cloudcannon:update", handleUpdate);
+    window.addEventListener("cloudcannon:load", checkEditor);
+
+    // Voer check uit
+    checkEditor();
+    setTimeout(checkEditor, 500);
 
     return () => {
-      document.removeEventListener(
-        "cloudcannon:update",
-        handleCloudCannonUpdate
-      );
-      document.removeEventListener("cloudcannon:load", checkEditor);
+      window.removeEventListener("cloudcannon:update", handleUpdate);
+      window.removeEventListener("cloudcannon:load", checkEditor);
     };
   }, []);
+
+  // Veilige fallback (voorkomt crashes bij lege data)
+  const safeContent = content || {
+    hero_label: "Laden...",
+    hero_title_start: "Laden...",
+    hero_title_italic: "",
+    hero_description: "",
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#FAFAFA] pt-20">
@@ -88,15 +88,16 @@ export const Hero = () => {
         {/* --- LABEL --- */}
         {isEditor ? (
           <span
+            suppressContentEditableWarning={true} // Voorkomt browser warnings
             className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white cursor-text"
             data-cms-bind="#hero_label"
           >
-            {content.hero_label}
+            {safeContent.hero_label}
           </span>
         ) : (
           <RevealText className="inline-block" delay={0.2}>
             <span className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white">
-              {content.hero_label}
+              {safeContent.hero_label}
             </span>
           </RevealText>
         )}
@@ -105,24 +106,28 @@ export const Hero = () => {
         <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-neutral-900 mb-8 tracking-tight cursor-default">
           {isEditor ? (
             <>
-              <span data-cms-bind="#hero_title_start">
-                {content.hero_title_start}
+              <span
+                suppressContentEditableWarning={true}
+                data-cms-bind="#hero_title_start"
+              >
+                {safeContent.hero_title_start}
               </span>
               <span
+                suppressContentEditableWarning={true}
                 className="italic text-neutral-400 font-light ml-2 md:ml-4"
                 data-cms-bind="#hero_title_italic"
               >
-                {content.hero_title_italic}
+                {safeContent.hero_title_italic}
               </span>
             </>
           ) : (
             <>
               <RevealText delay={0.3}>
-                <span>{content.hero_title_start}</span>
+                <span>{safeContent.hero_title_start}</span>
               </RevealText>
               <RevealText delay={0.4}>
                 <span className="italic text-neutral-400 font-light ml-2 md:ml-4">
-                  {content.hero_title_italic}
+                  {safeContent.hero_title_italic}
                 </span>
               </RevealText>
             </>
@@ -132,10 +137,11 @@ export const Hero = () => {
         {/* --- OMSCHRIJVING --- */}
         {isEditor ? (
           <p
+            suppressContentEditableWarning={true}
             className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
             data-cms-bind="#hero_description"
           >
-            {content.hero_description}
+            {safeContent.hero_description}
           </p>
         ) : (
           <motion.p
@@ -144,7 +150,7 @@ export const Hero = () => {
             transition={{ duration: 1, delay: 0.6 }}
             className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
           >
-            {content.hero_description}
+            {safeContent.hero_description}
           </motion.p>
         )}
 

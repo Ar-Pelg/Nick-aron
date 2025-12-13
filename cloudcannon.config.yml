@@ -2,7 +2,8 @@ paths:
   uploads: public/uploads
   static: ""
 
-# 1. Forceer de koppeling tussen home.json en de homepage
+# 1. DEZE REGEL IS CRUCIAAL
+# Hiermee dwingen we af: "Als ik home.json bewerk, update dan de homepage (url: /)"
 file_config:
   - glob: "content/home.json"
     url: /
@@ -10,14 +11,14 @@ file_config:
       - visual
       - data
 
-# 2. Algemene collectie instellingen
+# 2. Algemene instellingen
 collections_config:
   pages:
     path: content
     glob: "**/*.json"
     name: "Pagina's"
     output: false
-    url: / # Fallback URL
+    url: /
     _enabled_editors:
       - visual
       - data
@@ -34,7 +35,7 @@ source_editor:
     - "tsconfig.json"
     - "vite.config.ts"
 
-# 4. Input labels (voor de linker balk)
+# 4. Input labels
 _inputs:
   hero_label:
     label: "Label"
