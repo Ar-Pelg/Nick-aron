@@ -18,11 +18,10 @@ export const Hero = () => {
     }
   );
 
-  // State om te checken of we in CloudCannon zitten
   const [isEditor, setIsEditor] = useState(false);
 
   useEffect(() => {
-    // Functie die checkt of we in de editor zitten
+    // 1. Check of we in de editor zitten (voor de weergave van animaties)
     const checkEditor = () => {
       const inCloudCannon =
         typeof window !== "undefined" && (window as any).CloudCannon;
@@ -30,34 +29,30 @@ export const Hero = () => {
         setIsEditor(true);
       }
     };
-
-    // 1. Check direct bij laden
     checkEditor();
 
-    // 2. Probeer het na 100ms en 500ms nog eens (Fix voor race conditions)
-    const timer1 = setTimeout(checkEditor, 100);
-    const timer2 = setTimeout(checkEditor, 500);
+    // Check nogmaals na een korte tijd (voor de zekerheid)
+    setTimeout(checkEditor, 500);
 
-    // 3. Luister naar live updates
+    // 2. DIT IS HET BELANGRIJKE STUK VOOR LIVE UPDATES
+    // Deze functie zorgt dat als jij links typt, rechts direct update.
     const handleCloudCannonUpdate = (e: any) => {
       if (e.detail && e.detail.CloudCannon) {
         setContent(e.detail.CloudCannon);
-        setIsEditor(true); // Forceer editor modus bij update
+        setIsEditor(true);
       }
     };
 
-    // Luister naar events (Load is belangrijk!)
-    document.addEventListener("cloudcannon:load", checkEditor);
+    // We zetten de luisteraar AAN
     document.addEventListener("cloudcannon:update", handleCloudCannonUpdate);
+    document.addEventListener("cloudcannon:load", checkEditor);
 
     return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      document.removeEventListener("cloudcannon:load", checkEditor);
       document.removeEventListener(
         "cloudcannon:update",
         handleCloudCannonUpdate
       );
+      document.removeEventListener("cloudcannon:load", checkEditor);
     };
   }, []);
 
@@ -92,16 +87,13 @@ export const Hero = () => {
       <div className="relative z-20 text-center max-w-5xl px-6">
         {/* --- LABEL --- */}
         {isEditor ? (
-          /* EDITOR VERSIE */
           <span
-            suppressContentEditableWarning={true}
             className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white cursor-text"
             data-cms-bind="#hero_label"
           >
             {content.hero_label}
           </span>
         ) : (
-          /* LIVE VERSIE */
           <RevealText className="inline-block" delay={0.2}>
             <span className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white">
               {content.hero_label}
@@ -112,16 +104,11 @@ export const Hero = () => {
         {/* --- TITEL --- */}
         <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-neutral-900 mb-8 tracking-tight cursor-default">
           {isEditor ? (
-            /* EDITOR VERSIE (Platte tekst) */
             <>
-              <span
-                suppressContentEditableWarning={true}
-                data-cms-bind="#hero_title_start"
-              >
+              <span data-cms-bind="#hero_title_start">
                 {content.hero_title_start}
               </span>
               <span
-                suppressContentEditableWarning={true}
                 className="italic text-neutral-400 font-light ml-2 md:ml-4"
                 data-cms-bind="#hero_title_italic"
               >
@@ -129,7 +116,6 @@ export const Hero = () => {
               </span>
             </>
           ) : (
-            /* LIVE VERSIE (Met animatie) */
             <>
               <RevealText delay={0.3}>
                 <span>{content.hero_title_start}</span>
@@ -144,10 +130,8 @@ export const Hero = () => {
         </h1>
 
         {/* --- OMSCHRIJVING --- */}
-        {/* Voor de beschrijving gebruiken we ook de isEditor check om problemen met Motion te voorkomen */}
         {isEditor ? (
           <p
-            suppressContentEditableWarning={true}
             className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
             data-cms-bind="#hero_description"
           >
