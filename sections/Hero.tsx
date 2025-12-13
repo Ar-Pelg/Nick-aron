@@ -2,10 +2,21 @@ import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { RevealText } from "../components/RevealText";
 
+// 1. Importeer de data
+import contentData from "../../content/home.json";
+
 export const Hero = () => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
+
+  // 2. Veilige fallback (tegen het witte scherm probleem)
+  const content = contentData || {
+    hero_label: "Digital Atelier",
+    hero_title_start: "Wij bouwen digitale",
+    hero_title_italic: "monumenten.",
+    hero_description: "Nick & Aron combineren...",
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#FAFAFA] pt-20">
@@ -35,32 +46,45 @@ export const Hero = () => {
       </div>
 
       <div className="relative z-10 text-center max-w-5xl px-6">
+        {/* --- LABEL --- */}
         <RevealText className="inline-block" delay={0.2}>
           <span
             className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white"
-            data-cms-bind="#hero_title"
+            data-cms-bind="#hero_label"
           >
-            {content.hero_title}
+            {content.hero_label}
           </span>
         </RevealText>
 
+        {/* --- TITEL --- */}
         <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-neutral-900 mb-8 tracking-tight cursor-default">
-          <RevealText delay={0.3}>Wij bouwen digitale</RevealText>
+          <RevealText delay={0.3}>
+            {/* We zetten de bind op een span, zodat RevealText de animatie niet breekt */}
+            <span data-cms-bind="#hero_title_start">
+              {content.hero_title_start}
+            </span>
+          </RevealText>
+
           <RevealText delay={0.4}>
-            <span className="italic text-neutral-400 font-light">
-              monumenten.
+            {/* Apart veld voor het cursieve gedeelte om de styling te behouden */}
+            <span
+              className="italic text-neutral-400 font-light ml-2 md:ml-4"
+              data-cms-bind="#hero_title_italic"
+            >
+              {content.hero_title_italic}
             </span>
           </RevealText>
         </h1>
 
+        {/* --- OMSCHRIJVING --- */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.6 }}
           className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
+          data-cms-bind="#hero_description"
         >
-          Nick & Aron combineren strategisch inzicht met technische perfectie.
-          Wij creëren platforms die niet alleen functioneren, maar resoneren.
+          {content.hero_description}
         </motion.p>
 
         <motion.div
