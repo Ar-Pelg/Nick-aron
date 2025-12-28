@@ -54,8 +54,8 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
       depth: true
     });
     renderer.setSize(width, height);
-    // Cap pixel ratio to 1.5 to prevent massive lag on high-DPI retina screens
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    // Cap pixel ratio to 1.25 to prevent lag on high-DPI screens while maintaining decent quality
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
 
     renderer.shadowMap.enabled = true;
     // OPTIMIZATION: Switched to PCFShadowMap (faster than PCFSoftShadowMap)
@@ -75,8 +75,8 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
     dirLight.castShadow = true;
 
     // Shadow optimization: Smaller map is often sufficient for this art style
-    dirLight.shadow.mapSize.width = 1024;
-    dirLight.shadow.mapSize.height = 1024;
+    dirLight.shadow.mapSize.width = 512;
+    dirLight.shadow.mapSize.height = 512;
     dirLight.shadow.camera.near = 10;
     dirLight.shadow.camera.far = 150;
     dirLight.shadow.camera.left = -40;
@@ -158,7 +158,8 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
     ];
 
     // 6. Geometry & Instancing setup
-    const canalLength = 1600;
+    // OPTIMIZATION: Reduced world size. We loop at 600, so we don't need 1600 units of geometry.
+    const canalLength = 1000;
 
     const canalGeo = new THREE.PlaneGeometry(12, canalLength, 4, 64);
     const canal = new THREE.Mesh(canalGeo, materials.water);
@@ -181,15 +182,15 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
     createStaticStreet(-1);
 
     // --- INSTANCED MESHES ---
-    // OPTIMIZATION: Reduced limits slightly to save memory/processing
-    const maxHouses = 1600;
-    const maxWindows = 35000;
-    const maxTrees = 1500;
-    const maxPoles = 2000;
-    const maxBoats = 150;
-    const maxLights = 6000;
-    const maxLanterns = 1000;
-    const maxBikes = 2000;
+    // OPTIMIZATION: Drastically reduced limits for "lighter" city
+    const maxHouses = 800; // Was 1600
+    const maxWindows = 15000; // Was 35000
+    const maxTrees = 600;    // Was 1500
+    const maxPoles = 800;    // Was 2000
+    const maxBoats = 60;     // Was 150
+    const maxLights = 3000;  // Was 6000
+    const maxLanterns = 400; // Was 1000
+    const maxBikes = 800;    // Was 2000
 
     const dummy = new THREE.Object3D();
 
