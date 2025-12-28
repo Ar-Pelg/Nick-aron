@@ -44,8 +44,8 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-neutral-900 selection:bg-neutral-900 selection:text-white cursor-none font-sans antialiased">
-      <CustomCursor />
+    <div className={`min-h-screen bg-[#FAFAFA] text-neutral-900 selection:bg-neutral-900 selection:text-white font-sans antialiased ${!isEditor ? 'cursor-none' : ''}`}>
+      {!isEditor && <CustomCursor />}
       <TracingLine />
       <Navbar />
 

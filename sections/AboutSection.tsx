@@ -45,7 +45,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
       <div className="relative z-10 pointer-events-none text-white px-6 md:px-16 py-32 flex flex-col items-center justify-center min-h-screen">
 
         {/* GLASS CARD 1: Philosophy */}
-        <div className="max-w-4xl mx-auto mb-24 p-12 bg-neutral-900/40 backdrop-blur-md border border-white/10 shadow-2xl">
+        <div className="max-w-4xl mx-auto mb-24 p-12 bg-neutral-900/40 backdrop-blur-md border border-white/10 shadow-2xl pointer-events-auto">
           <RevealText>
             <h4
               className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-8 border-b border-white/10 pb-4 inline-block"
@@ -61,7 +61,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
         </div>
 
         {/* GLASS CARD 2: Grid */}
-        <div className="max-w-6xl mx-auto p-12 bg-neutral-900/60 backdrop-blur-md border border-white/10 shadow-2xl">
+        <div className="max-w-6xl mx-auto p-12 bg-neutral-900/60 backdrop-blur-md border border-white/10 shadow-2xl pointer-events-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16">
             {safeData.grid_items && safeData.grid_items.map((item: any, i: number) => (
               <div key={i}>
