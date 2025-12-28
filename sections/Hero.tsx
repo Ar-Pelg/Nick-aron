@@ -1,55 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { RevealText } from "../components/RevealText";
-import contentData from "../content/home.json";
 
-export const Hero = () => {
+interface HeroProps {
+  data: any;
+  isEditor: boolean;
+}
+
+export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -150]);
 
-  // Initialiseer state
-  const [content, setContent] = useState(contentData);
-  const [isEditor, setIsEditor] = useState(false);
-
-  useEffect(() => {
-    // 1. Check of we in de editor zitten
-    const checkEditor = () => {
-      const inCloudCannon =
-        typeof window !== "undefined" && (window as any).CloudCannon;
-      if (inCloudCannon) {
-        setIsEditor(true);
-      }
-    };
-
-    // 2. LIVE UPDATE FUNCTIE
-    const handleUpdate = (e: any) => {
-      // Check in je console (F12) of je dit vuurtje ziet!
-      console.log("🔥 Update ontvangen:", e.detail?.CloudCannon);
-
-      if (e.detail && e.detail.CloudCannon) {
-        // TRUCJE: De ... (spread operator) forceert React om te re-renderen
-        setContent({ ...e.detail.CloudCannon });
-        setIsEditor(true);
-      }
-    };
-
-    // We gebruiken 'window' voor betere betrouwbaarheid
-    window.addEventListener("cloudcannon:update", handleUpdate);
-    window.addEventListener("cloudcannon:load", checkEditor);
-
-    // Voer check uit
-    checkEditor();
-    setTimeout(checkEditor, 500);
-
-    return () => {
-      window.removeEventListener("cloudcannon:update", handleUpdate);
-      window.removeEventListener("cloudcannon:load", checkEditor);
-    };
-  }, []);
-
-  // Veilige fallback (voorkomt crashes bij lege data)
-  const safeContent = content || {
+  // Fallback
+  const safeContent = data || {
     hero_label: "Laden...",
     hero_title_start: "Laden...",
     hero_title_italic: "",
@@ -88,16 +52,16 @@ export const Hero = () => {
         {/* --- LABEL --- */}
         {isEditor ? (
           <span
-            suppressContentEditableWarning={true} // Voorkomt browser warnings
+            suppressContentEditableWarning={true}
             className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white cursor-text"
-            data-cms-bind="#hero_label"
+            data-cms-bind="#hero.label"
           >
-            {safeContent.hero_label}
+            {safeContent.label}
           </span>
         ) : (
           <RevealText className="inline-block" delay={0.2}>
             <span className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white">
-              {safeContent.hero_label}
+              {safeContent.label}
             </span>
           </RevealText>
         )}
@@ -108,26 +72,26 @@ export const Hero = () => {
             <>
               <span
                 suppressContentEditableWarning={true}
-                data-cms-bind="#hero_title_start"
+                data-cms-bind="#hero.title_start"
               >
-                {safeContent.hero_title_start}
+                {safeContent.title_start}
               </span>
               <span
                 suppressContentEditableWarning={true}
                 className="italic text-neutral-400 font-light ml-2 md:ml-4"
-                data-cms-bind="#hero_title_italic"
+                data-cms-bind="#hero.title_italic"
               >
-                {safeContent.hero_title_italic}
+                {safeContent.title_italic}
               </span>
             </>
           ) : (
             <>
               <RevealText delay={0.3}>
-                <span>{safeContent.hero_title_start}</span>
+                <span>{safeContent.title_start}</span>
               </RevealText>
               <RevealText delay={0.4}>
                 <span className="italic text-neutral-400 font-light ml-2 md:ml-4">
-                  {safeContent.hero_title_italic}
+                  {safeContent.title_italic}
                 </span>
               </RevealText>
             </>
@@ -139,9 +103,9 @@ export const Hero = () => {
           <p
             suppressContentEditableWarning={true}
             className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
-            data-cms-bind="#hero_description"
+            data-cms-bind="#hero.description"
           >
-            {safeContent.hero_description}
+            {safeContent.description}
           </p>
         ) : (
           <motion.p
@@ -150,7 +114,7 @@ export const Hero = () => {
             transition={{ duration: 1, delay: 0.6 }}
             className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
           >
-            {safeContent.hero_description}
+            {safeContent.description}
           </motion.p>
         )}
 
