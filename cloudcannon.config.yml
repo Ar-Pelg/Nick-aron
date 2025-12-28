@@ -24,7 +24,24 @@ _inputs:
   hero_description:
     label: "Omschrijving"
     type: textarea
+  projects:
+    label: "Geselecteerde Projecten"
+    type: array
 
+_structures:
+  projects:
+    values:
+      - label: "Nieuw Project"
+        value:
+          title: "Nieuw Project"
+          cat: "Categorie"
+          year: "2025"
+          client: "Klantnaam"
+          role: "Jouw Rol"
+          img: ""
+          desc: "Beschrijving van het project..."
+          detailImages: []
+          
 # 4. Verberg systeem rommel
 source_editor:
   ignore:
