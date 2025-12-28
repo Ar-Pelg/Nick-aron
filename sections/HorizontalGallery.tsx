@@ -12,12 +12,43 @@ interface HorizontalGalleryProps {
 
 export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, data, onSelectProject }) => {
   const targetRef = useRef(null);
+  const [scrollRange, setScrollRange] = React.useState("-60%");
+
+  // Dynamic scroll calculation
+  React.useEffect(() => {
+    const calculateScroll = () => {
+      const isMobile = window.innerWidth < 768;
+      const numProjects = projects ? projects.length : 0;
+
+      // Estimated widths in VW
+      // Desktop: Intro (~40vw) + Projects (50vw each) + Gaps
+      // Mobile: Intro (~80vw) + Projects (80vw each) + Gaps
+      const introWidth = isMobile ? 85 : 45;
+      const projectWidth = isMobile ? 85 : 55;
+
+      const totalWidthVW = introWidth + (numProjects * projectWidth);
+      const viewportWidthVW = 100;
+
+      // We need to move enough to see the end, so total width minus viewport
+      const neededScrollVW = totalWidthVW - viewportWidthVW;
+
+      // Add a little buffer (5vw) to ensure last item clears nicely
+      const finalScroll = Math.max(0, neededScrollVW + 5);
+
+      setScrollRange(`-${finalScroll}vw`);
+    };
+
+    calculateScroll();
+    window.addEventListener('resize', calculateScroll);
+    return () => window.removeEventListener('resize', calculateScroll);
+  }, [projects]);
+
   const { scrollYProgress } = useScroll({
     target: targetRef,
     offset: ["start start", "end end"]
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-60%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", scrollRange]);
 
   const safeData = data || {
     title_small: "Geselecteerd Werk",
