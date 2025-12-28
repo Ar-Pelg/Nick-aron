@@ -27,6 +27,10 @@ _inputs:
   projects:
     label: "Geselecteerde Projecten"
     type: array
+  detailImages:
+    label: "Detail Afbeeldingen"
+    type: array
+    of: image
 
 _structures:
   projects:
