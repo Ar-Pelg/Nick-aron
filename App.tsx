@@ -17,6 +17,8 @@ export default function App() {
   const [isEditor, setIsEditor] = useState(false);
 
   useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
     // 1. Check Initial Editor State (including parent for iframes)
     const checkEditor = () => {
       const inCloudCannon =
@@ -24,17 +26,19 @@ export default function App() {
         (typeof window !== "undefined" && window.parent && (window.parent as any).CloudCannon);
 
       if (inCloudCannon) {
-        console.log("✅ CloudCannon detected via window object");
+        // console.log("✅ CloudCannon detected");
         setIsEditor(true);
+        // Stop polling once found
+        if (intervalId) clearInterval(intervalId);
       }
     };
 
     // 2. Live Update Listener
     const handleUpdate = (e: any) => {
       if (e.detail && e.detail.CloudCannon) {
-        console.log("🔥 CloudCannon Update:", e.detail.CloudCannon);
         setContent({ ...e.detail.CloudCannon });
         setIsEditor(true);
+        if (intervalId) clearInterval(intervalId);
       }
     };
 
@@ -46,12 +50,18 @@ export default function App() {
     checkEditor();
 
     // POLLING CHECK (Backup for race conditions)
-    const intervalId = setInterval(checkEditor, 1000);
+    // Run for max 10 seconds then stop to save resources if not in editor
+    let attempts = 0;
+    intervalId = setInterval(() => {
+      attempts++;
+      checkEditor();
+      if (attempts > 10) clearInterval(intervalId);
+    }, 1000);
 
     return () => {
       document.removeEventListener("cloudcannon:update", handleUpdate);
       document.removeEventListener("cloudcannon:load", checkEditor);
-      clearInterval(intervalId);
+      if (intervalId) clearInterval(intervalId);
     };
   }, []);
 
