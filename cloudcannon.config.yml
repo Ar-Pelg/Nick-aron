@@ -27,7 +27,7 @@ _inputs:
   projects:
     label: "Geselecteerde Projecten"
     type: array
-  detailImages:
+  "projects[*].detailImages":
     label: "Detail Afbeeldingen"
     type: array
     of: image
