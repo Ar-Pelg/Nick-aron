@@ -27,10 +27,16 @@ _inputs:
   projects:
     label: "Geselecteerde Projecten"
     type: array
-  "projects[*].detailImages":
+  # GLOBAL KEY matching for any field named 'detailImages'
+  detailImages:
     label: "Detail Afbeeldingen"
     type: array
-    of: image
+    options:
+      structures:
+        values:
+          - label: "Afbeelding"
+            image: true
+            value: ""
 
 _structures:
   projects:
