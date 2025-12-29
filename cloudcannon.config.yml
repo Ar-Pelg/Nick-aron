@@ -36,6 +36,8 @@ _inputs:
   detailImages:
     label: "Detail Afbeeldingen"
     type: array
+  "detailImages[*]":
+    type: image
 
 _structures:
   detailImages:
