@@ -47,8 +47,19 @@ export default function App() {
       }
     };
 
+    // 3. Handle CloudCannon Load Event explicitly
+    const handleLoad = (e: any) => {
+      // If the event fires, we are in CloudCannon!
+      // console.log("✅ CloudCannon load event fired", e);
+      if (e.detail && e.detail.CloudCannon) {
+        setContent({ ...e.detail.CloudCannon });
+      }
+      setIsEditor(true);
+      if (intervalId) clearInterval(intervalId);
+    };
+
     // Use document for load event as per docs
-    document.addEventListener("cloudcannon:load", checkEditor);
+    document.addEventListener("cloudcannon:load", handleLoad);
     document.addEventListener("cloudcannon:update", handleUpdate);
 
     // IMMEDIATE CHECK
@@ -65,7 +76,7 @@ export default function App() {
 
     return () => {
       document.removeEventListener("cloudcannon:update", handleUpdate);
-      document.removeEventListener("cloudcannon:load", checkEditor);
+      document.removeEventListener("cloudcannon:load", handleLoad);
       if (intervalId) clearInterval(intervalId);
     };
   }, []);
