@@ -53,8 +53,6 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
         <RevealText className="inline-block" delay={0.2} disabled={isEditor}>
           <span
             className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white"
-            data-cms-bind="#hero.label"
-            suppressContentEditableWarning={true}
           >
             {safeContent.label}
           </span>
@@ -63,19 +61,12 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
         {/* --- TITEL --- */}
         <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-neutral-900 mb-8 tracking-tight cursor-default">
           <RevealText delay={0.3} disabled={isEditor} as="span">
-            <span
-              data-cms-bind="#hero.title_start"
-              suppressContentEditableWarning={true}
-            >
+            <span>
               {safeContent.title_start}
             </span>
           </RevealText>
           <RevealText delay={0.4} disabled={isEditor} as="span">
-            <span
-              className="italic text-neutral-400 font-light ml-2 md:ml-4"
-              data-cms-bind="#hero.title_italic"
-              suppressContentEditableWarning={true}
-            >
+            <span className="italic text-neutral-400 font-light ml-2 md:ml-4">
               {safeContent.title_italic}
             </span>
           </RevealText>
@@ -84,9 +75,7 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
         {/* --- OMSCHRIJVING --- */}
         {isEditor ? (
           <p
-            suppressContentEditableWarning={true}
             className="text-neutral-500 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed mb-12"
-            data-cms-bind="#hero.description"
           >
             {safeContent.description}
           </p>

@@ -19,16 +19,12 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 mb-20">
         <h2
           className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-8"
-          data-cms-bind="#expertise.title_small"
-          suppressContentEditableWarning={true}
         >
           {safeData.title_small}
         </h2>
         <RevealText disabled={isEditor}>
           <p
             className="font-serif text-4xl md:text-5xl max-w-4xl leading-tight"
-            data-cms-bind="#expertise.title_large"
-            suppressContentEditableWarning={true}
           >
             {safeData.title_large}
           </p>

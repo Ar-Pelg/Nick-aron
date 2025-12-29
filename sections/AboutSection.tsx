@@ -54,14 +54,12 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
           <RevealText disabled={isEditor}>
             <h4
               className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-8 border-b border-white/10 pb-4 inline-block"
-              data-cms-bind="#about.philosophy_title"
-              suppressContentEditableWarning={true}
             >
               {safeData.philosophy_title}
             </h4>
           </RevealText>
           <div className="font-serif text-4xl md:text-6xl leading-tight text-white drop-shadow-lg italic">
-            "<span data-cms-bind="#about.philosophy_quote_start" suppressContentEditableWarning={true}>{safeData.philosophy_quote_start}</span> <span className="text-neutral-400" data-cms-bind="#about.philosophy_quote_highlight1" suppressContentEditableWarning={true}>{safeData.philosophy_quote_highlight1}</span> <span data-cms-bind="#about.philosophy_quote_mid" suppressContentEditableWarning={true}>{safeData.philosophy_quote_mid}</span> <span className="text-neutral-400" data-cms-bind="#about.philosophy_quote_highlight2" suppressContentEditableWarning={true}>{safeData.philosophy_quote_highlight2}</span> <span data-cms-bind="#about.philosophy_quote_end" suppressContentEditableWarning={true}>{safeData.philosophy_quote_end}</span>"
+            "<span>{safeData.philosophy_quote_start}</span> <span className="text-neutral-400">{safeData.philosophy_quote_highlight1}</span> <span>{safeData.philosophy_quote_mid}</span> <span className="text-neutral-400">{safeData.philosophy_quote_highlight2}</span> <span>{safeData.philosophy_quote_end}</span>"
           </div>
         </div>
 

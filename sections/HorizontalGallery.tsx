@@ -64,8 +64,6 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
         <div className="absolute top-12 left-6 md:left-12 z-20">
           <h2
             className="text-xs uppercase tracking-[0.2em] text-neutral-400"
-            data-cms-bind="#projects_section.title_small"
-            suppressContentEditableWarning={true}
           >
             {safeData.title_small}
           </h2>
@@ -74,19 +72,17 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
         <motion.div style={{ x }} className="flex gap-12 pl-6 md:pl-12 will-change-transform">
           <div className="flex-shrink-0 w-[80vw] md:w-[40vw] flex flex-col justify-center pr-20">
             <h3 className="font-serif text-5xl md:text-7xl mb-8 leading-none">
-              <span data-cms-bind="#projects_section.title_large_start" suppressContentEditableWarning={true}>{safeData.title_large_start}</span> <br />
-              <span className="italic text-neutral-500" data-cms-bind="#projects_section.title_large_italic" suppressContentEditableWarning={true}>{safeData.title_large_italic}</span>
+              <span>{safeData.title_large_start}</span> <br />
+              <span className="italic text-neutral-500">{safeData.title_large_italic}</span>
             </h3>
             <p
               className="text-neutral-400 font-light text-lg max-w-md mb-8"
-              data-cms-bind="#projects_section.description"
-              suppressContentEditableWarning={true}
             >
               {safeData.description}
             </p>
             <div className="flex items-center gap-4 text-xs uppercase tracking-widest">
               <div className="w-12 h-[1px] bg-white" />
-              <span data-cms-bind="#projects_section.scroll_text" suppressContentEditableWarning={true}>{safeData.scroll_text}</span>
+              <span>{safeData.scroll_text}</span>
             </div>
           </div>
 

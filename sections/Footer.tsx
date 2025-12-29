@@ -31,25 +31,23 @@ export const Footer: React.FC<FooterProps> = ({ data, isEditor }) => {
 
                <div>
                   <h2 className="font-serif text-6xl md:text-8xl lg:text-9xl mb-12 leading-[0.8] relative z-10">
-                     <RevealText disabled={isEditor} as="span"><span data-cms-bind="#footer.title_start" suppressContentEditableWarning={true}>{safeData.title_start}</span></RevealText>
+                     <RevealText disabled={isEditor} as="span"><span>{safeData.title_start}</span></RevealText>
                      <RevealText delay={0.1} disabled={isEditor} as="span">
                         <span
                            className="italic text-neutral-500"
-                           data-cms-bind="#footer.title_italic"
-                           suppressContentEditableWarning={true}
                         >
                            {safeData.title_italic}
                         </span>
                      </RevealText>
                   </h2>
                   <Button variant="white" className="border-white text-white">
-                     <span data-cms-bind="#footer.button_text" suppressContentEditableWarning={true}>{safeData.button_text}</span>
+                     <span>{safeData.button_text}</span>
                   </Button>
                </div>
                <div className="flex flex-col justify-end lg:items-end">
                   <ul className="space-y-4 text-lg font-light text-neutral-300 lg:text-right mb-12">
-                     <li><a href={`mailto:${safeData.email}`} className="hover:text-white transition-colors cursor-pointer" data-cursor="Email" data-cms-bind="#footer.email" suppressContentEditableWarning={true}>{safeData.email}</a></li>
-                     <li><a href={`tel:${safeData.phone}`} className="hover:text-white transition-colors cursor-pointer" data-cursor="Bel" data-cms-bind="#footer.phone" suppressContentEditableWarning={true}>{safeData.phone}</a></li>
+                     <li><a href={`mailto:${safeData.email}`} className="hover:text-white transition-colors cursor-pointer" data-cursor="Email">{safeData.email}</a></li>
+                     <li><a href={`tel:${safeData.phone}`} className="hover:text-white transition-colors cursor-pointer" data-cursor="Bel">{safeData.phone}</a></li>
                   </ul>
                   <div className="flex gap-8 text-xs uppercase tracking-widest text-neutral-500">
                      {safeData.socials && safeData.socials.map((social: any, i: number) => (
@@ -60,8 +58,8 @@ export const Footer: React.FC<FooterProps> = ({ data, isEditor }) => {
             </div>
 
             <div className="flex flex-col md:flex-row justify-between items-end border-t border-neutral-800 pt-8 gap-4">
-               <span className="text-neutral-600 text-xs uppercase tracking-widest" data-cms-bind="#footer.copyright" suppressContentEditableWarning={true}>{safeData.copyright}</span>
-               <span className="text-neutral-600 text-xs uppercase tracking-widest" data-cms-bind="#footer.location" suppressContentEditableWarning={true}>{safeData.location}</span>
+               <span className="text-neutral-600 text-xs uppercase tracking-widest">{safeData.copyright}</span>
+               <span className="text-neutral-600 text-xs uppercase tracking-widest">{safeData.location}</span>
             </div>
          </div>
       </footer>
