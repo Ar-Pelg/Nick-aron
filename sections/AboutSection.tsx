@@ -63,22 +63,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
           </div>
         </div>
 
-        {/* GLASS CARD 2: Grid */}
-        <div className={`max-w-6xl mx-auto p-12 bg-neutral-900/60 backdrop-blur-md border border-white/10 shadow-2xl ${!isEditor ? 'pointer-events-auto' : ''}`}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16">
-            {safeData.grid_items && safeData.grid_items.map((item: any, i: number) => (
-              <div key={i}>
-                <RevealText delay={0.1 * i} disabled={isEditor}>
-                  <h5 className="font-serif text-3xl mb-4 text-white drop-shadow-sm flex items-center gap-3">
-                    <span className="w-2 h-2 bg-neutral-500 rounded-full"></span>
-                    {item.title}
-                  </h5>
-                  <p className="text-base text-neutral-300 leading-relaxed drop-shadow-sm pl-5 font-light">{item.desc}</p>
-                </RevealText>
-              </div>
-            ))}
-          </div>
-        </div>
+
       </div>
     </section>
   );

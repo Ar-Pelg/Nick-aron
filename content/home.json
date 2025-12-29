@@ -146,29 +146,7 @@
     "philosophy_quote_highlight1": "reductie",
     "philosophy_quote_mid": "en",
     "philosophy_quote_highlight2": "expressie",
-    "philosophy_quote_end": "elkaar ontmoeten.",
-    "grid_items": [
-      {
-        "title": "Precisie",
-        "desc": "Tot op de pixel nauwkeurig. Wij accepteren geen 'bijna goed'. Elk detail telt in de digitale ervaring."
-      },
-      {
-        "title": "Tijdloosheid",
-        "desc": "Geen trends die morgen verouderd zijn, maar klassieke principes van typografie en grid-systemen."
-      },
-      {
-        "title": "Impact",
-        "desc": "Ontworpen met conversie en pure merkbeleving als leidraad. Wij bouwen om te raken."
-      },
-      {
-        "title": "Transparantie",
-        "desc": "Geen jargon. Een helder proces van schets tot lancering, met open communicatie."
-      },
-      {
-        "title": "Test",
-        "desc": "Ja aan het testen."
-      }
-    ]
+    "philosophy_quote_end": "elkaar ontmoeten."
   },
   "footer": {
     "title_start": "Let's",
