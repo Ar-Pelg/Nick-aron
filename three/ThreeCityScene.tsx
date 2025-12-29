@@ -530,34 +530,234 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
     let stepCount = 0;
     for (let z = -genRange; z < genRange; z += 5) {
       stepCount++;
-      const zOffsets = [-loopLength, 0, loopLength];
 
       if (stepCount % 2 !== 0) {
         if (treeIdx + 3 <= maxTrees) {
           [-7.8, 7.8].forEach(tx => {
-            const rOffset = Math.random() * 2;
-            const rRot = Math.random();
-            const isBig = 1;
+            dummy.position.set(tx, 1.5, z + (Math.random() * 2));
+            dummy.scale.set(1, 1, 1);
+            dummy.rotation.set(0, Math.random(), 0);
 
-            zOffsets.forEach(offset => {
-              dummy.position.set(tx, 1.5, z + rOffset + offset);
-              dummy.scale.set(1, 1, 1); dummy.rotation.set(0, rRot, 0); dummy.updateMatrix();
-              treeTrunkMesh.setMatrixAt(treeIdx, dummy.matrix);
+            // Trunk
+            // Let's do it manually for trees to ensure they sync.
+            // Actually, easiest is:
+            // 1. Capture current `treeIdx`.
+            // 2. Add trunks (uses 0, 1, 2).
+            // 3. Reset `treeIdx` locally? No, that would overwrite.
+            // 4. We want to write to Trunk[0,1,2] and Leaves[0,1,2].
+            // So we should pass a COPY of treeIdx to both, then increment treeIdx manually by 3.
 
-              dummy.position.set(tx, 4.0, z + rOffset + offset); dummy.scale.set(1, 1.2, 1); dummy.updateMatrix();
-              treeLeavesMesh.setMatrixAt(treeIdx, dummy.matrix); // Note: treeIdx matches for both parts if we increment after outer loop? No, separate arrays.
-              // Wait, treeTrunk and treeLeaves share Index? No, separate meshes.
-              // I need to update both indices linearly.
-            });
-            treeIdx += 3;
+            const idxRefTrunk = { val: treeIdx };
+            const idxRefLeaves = { val: treeIdx };
 
-            // Lights (simplified for brevity)
+            addPeriodicInstance(treeTrunkMesh, idxRefTrunk, dummy, maxTrees);
+
+            dummy.position.set(tx, 4.0, z + (Math.random() * 2));
+            dummy.scale.set(1, 1.2, 1);
+
+            addPeriodicInstance(treeLeavesMesh, idxRefLeaves, dummy, maxTrees);
+
+            treeIdx += 3; // Manually update global counter
+
+            // String Lights between trees
+            for (let k = 0; k < 5; k++) {
+              const lx = tx + (Math.random() - 0.5) * 1.5;
+              const ly = 3.5 + (Math.random() * 1.5);
+              const lz = z + (Math.random() - 0.5) * 1.5;
+              if (lightIdx + 3 <= maxLights) {
+                dummy.position.set(lx, ly, lz);
+                dummy.scale.set(0.6, 0.6, 0.6);
+                dummy.rotation.set(0, 0, 0);
+                addPeriodicInstance(stringLightMesh, { val: lightIdx }, dummy, maxLights);
+                lightIdx += 3;
+              }
+            }
+          });
+        }
+      } else {
+        if (lanternIdx + 3 <= maxLanterns) {
+          [-6.8, 6.8].forEach(lx => {
+            dummy.position.set(lx, 1.75, z);
+            dummy.scale.set(1, 1, 1);
+            dummy.rotation.set(0, 0, 0);
+
+            const idxRefPost = { val: lanternIdx };
+            const idxRefHead = { val: lanternIdx }; // Reuse index for synced arrays
+
+            addPeriodicInstance(lanternMesh, idxRefPost, dummy, maxLanterns);
+
+            dummy.position.set(lx, 3.6, z);
+            addPeriodicInstance(lanternHeadMesh, idxRefHead, dummy, maxLanterns);
+
+            lanternIdx += 3;
+
+            if (lightIdx + 3 <= maxLights) {
+              dummy.position.set(lx, 3.6, z);
+              dummy.scale.set(1.5, 1.5, 1.5);
+              addPeriodicInstance(stringLightMesh, { val: lightIdx }, dummy, maxLights);
+              lightIdx += 3;
+            }
           });
         }
       }
 
-      // ... (Adapting the rest similarly)
-      // For brevity, I will apply the full logic in the Tool call.
+      if (z % 3 === 0 && poleIdx + 3 <= maxPoles) {
+        [-6.4, 6.4].forEach(px => {
+          dummy.position.set(px, 0.4, z);
+          dummy.scale.set(1, 1, 1);
+          dummy.rotation.set(0, 0, 0);
+          addPeriodicInstance(poleMesh, { val: poleIdx }, dummy, maxPoles);
+          poleIdx += 3;
+        });
+      }
+
+      if (bikeIdx + 3 <= maxBikes - 8) {
+        [-6.2, 6.2].forEach(bx => {
+          for (let b = 0; b < 2; b++) {
+            const bz = z + (Math.random() * 3);
+            const rot = (Math.random() - 0.5) * 0.8;
+            const isLeft = bx < 0;
+
+            // Parts need sync logic?
+            // Yes, bikeMesh (wheels) uses 2x indices (front/back).
+            // frame, handle, saddle, carrier use 1x.
+            // Global `bikeIdx` tracks "Bikes".
+            // So for Bike N:
+            // Frame[N], Handle[N], etc.
+            // Wheels[2N, 2N+1].
+
+            // This is complex with periodic. 
+            // 3 bikes: N, N+1, N+2? No, 3 copies of SAME bike.
+            // Bike Location i:
+            //   - Center: BikeIdx K
+            //   - Back: BikeIdx K+1
+            //   - Front: BikeIdx K+2
+            // So we consume 3 "Bike Slots".
+
+            const currentBikeIdx = bikeIdx;
+
+            // Helper for bike parts
+            const addBikePart = (mesh: THREE.InstancedMesh, partOffset: number, scaleOverride?: number) => {
+              // For part meshes, we just need 3 consecutive indices from currentBikeIdx
+              // Wait, we need to pass a "reset" ref every time?
+              // Yes: {val: currentBikeIdx}.
+            };
+
+            // Actually, let's just use the `addPeriodicInstance` logic but being careful.
+
+            // 1. WHEELS (Special case: 2 wheels per bike)
+            // We need 3 pairs of wheels.
+            // Wheel indices: [2*K, 2*K+1], [2*(K+1), ...? ]
+            // The original code: `bikeMesh.setMatrixAt(bikeIdx * 2, ...)`
+            // This implies bikeMesh is sized 2 * maxBikes.
+            // If we increment bikeIdx by 3 (K, K+1, K+2), then:
+            // Center Bike (K): Uses 2K, 2K+1.
+            // Back Bike (K+1): Uses 2(K+1), ...
+            // This works perfectly if we treat them as independent bikes in the arrays.
+
+            dummy.position.set(bx, 0.95, bz - 0.45);
+            dummy.rotation.set(rot, isLeft ? -0.1 : 0.1, 0);
+            dummy.scale.set(1, 1, 1);
+
+            // Front Wheel
+            // We can't use `addPeriodicInstance` easily because it assumes +1 stride.
+            // Wheels need +2 stride if we want to interleave or we just map carefully.
+            // Actually, let's just do it manually for wheels to avoid headache.
+
+            const offsets = [-loopLength, 0, loopLength];
+            offsets.forEach((offset, i) => {
+              const idx = bikeIdx + i; // K, K+1, K+2
+
+              // Front Wheel
+              dummy.position.set(bx, 0.95, bz - 0.45 + offset);
+              dummy.rotation.set(rot, isLeft ? -0.1 : 0.1, 0);
+              dummy.updateMatrix();
+              bikeMesh.setMatrixAt(idx * 2, dummy.matrix);
+
+              // Rear Wheel
+              dummy.position.set(bx, 0.95, bz + 0.45 + offset);
+              dummy.rotation.set(rot + 0.1, isLeft ? -0.4 : 0.4, 0);
+              dummy.updateMatrix();
+              bikeMesh.setMatrixAt(idx * 2 + 1, dummy.matrix);
+
+              // Frame
+              dummy.position.set(bx, 1.15, bz + offset);
+              dummy.rotation.set(rot + Math.PI / 4, isLeft ? -0.1 : 0.1, 0);
+              dummy.updateMatrix();
+              bikeFrameMesh.setMatrixAt(idx, dummy.matrix);
+
+              // Handle
+              dummy.position.set(bx, 1.6, bz + 0.3 + offset);
+              dummy.rotation.set(rot - 0.5, isLeft ? -0.4 : 0.4, 0);
+              dummy.updateMatrix();
+              bikeHandleMesh.setMatrixAt(idx, dummy.matrix);
+
+              // Saddle
+              dummy.position.set(bx, 1.5, bz - 0.2 + offset);
+              dummy.rotation.set(rot, isLeft ? -0.1 : 0.1, 0);
+              dummy.updateMatrix();
+              bikeSaddleMesh.setMatrixAt(idx, dummy.matrix);
+
+              // Carrier
+              dummy.position.set(bx, 1.35, bz - 0.45 + offset);
+              dummy.rotation.set(rot, isLeft ? -0.1 : 0.1, Math.PI / 2);
+              dummy.updateMatrix();
+              bikeCarrierMesh.setMatrixAt(idx, dummy.matrix);
+            });
+
+            bikeIdx += 3;
+          }
+        });
+      }
+
+      if (z % 25 === 0 && lightIdx + (16 * 3) <= maxLights) { // Check space for 3 copies of 16 lights
+        const startX = -7.8;
+        const endX = 7.8;
+        const height = 4.5;
+        const sag = 1.5;
+
+        const points = 15;
+        for (let i = 0; i <= points; i++) {
+          const t = i / points;
+          const x = startX + (endX - startX) * t;
+          const y = height - (Math.sin(t * Math.PI) * sag);
+
+          dummy.position.set(x, y, z);
+          dummy.scale.set(1, 1, 1);
+
+          addPeriodicInstance(stringLightMesh, { val: lightIdx }, dummy, maxLights);
+          lightIdx += 3;
+        }
+      }
+
+      if (z % 15 === 0 && Math.random() > 0.3 && boatIdx + 3 <= maxBoats) {
+        const bx = 5.4;
+        const isLeft = Math.random() > 0.5;
+
+        dummy.position.set(isLeft ? -bx : bx, 0.2, z);
+        dummy.rotation.set(Math.random() * 0.1, isLeft ? -0.1 : 0.1, Math.random() * 0.1);
+        dummy.scale.set(1, 1, 1);
+
+        // Hull
+        addPeriodicInstance(dockedHullMesh, { val: boatIdx }, dummy, maxBoats);
+
+        // Cover
+        // This is getting messy. Cleanest is:
+        // const idx = boatIdx;
+        // addPeriodicInstance(hull, {val: idx}, ...);
+        // addPeriodicInstance(cover, {val: idx}, ...); // Fails (val is copied)
+
+        // Correct:
+        const currentRefHull = { val: boatIdx };
+        const currentRefCover = { val: boatIdx }; // Start same
+
+        addPeriodicInstance(dockedHullMesh, currentRefHull, dummy, maxBoats);
+
+        dummy.position.set(isLeft ? -bx : bx, 0.45, z);
+        addPeriodicInstance(dockedCoverMesh, currentRefCover, dummy, maxBoats);
+
+        boatIdx += 3;
+      }
     }
 
     // Adjust boat loop logic
