@@ -21,15 +21,20 @@ export default function App() {
 
     // 1. Check Initial Editor State (including parent for iframes)
     const checkEditor = () => {
-      const inCloudCannon =
-        (typeof window !== "undefined" && (window as any).CloudCannon) ||
-        (typeof window !== "undefined" && window.parent && (window.parent as any).CloudCannon);
+      try {
+        const inCloudCannon =
+          (typeof window !== "undefined" && (window as any).CloudCannon) ||
+          (typeof window !== "undefined" && window.parent && (window.parent as any).CloudCannon);
 
-      if (inCloudCannon) {
-        // console.log("✅ CloudCannon detected");
-        setIsEditor(true);
-        // Stop polling once found
-        if (intervalId) clearInterval(intervalId);
+        if (inCloudCannon) {
+          // console.log("✅ CloudCannon detected");
+          setIsEditor(true);
+          // Stop polling once found
+          if (intervalId) clearInterval(intervalId);
+        }
+      } catch (error) {
+        // Silently fail if access to window.parent is blocked
+        console.warn("CloudCannon check failed:", error);
       }
     };
 
