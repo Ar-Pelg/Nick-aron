@@ -94,7 +94,7 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
               onClick={() => onSelectProject(project)}
             >
               <img
-                src={project.img}
+                src={project.img.startsWith('/public') ? project.img.substring(7) : project.img}
                 alt={project.title}
                 loading="lazy"
                 decoding="async"
