@@ -141,12 +141,12 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
       glow: new THREE.MeshBasicMaterial({ color: 0xffd54f }),
       stringLight: new THREE.MeshBasicMaterial({ color: 0xffca28 }),
       brickBase: new THREE.MeshStandardMaterial({ color: 0xffffff }),
-      cushion: new THREE.MeshStandardMaterial({ color: 0x1565C0, roughness: 1.0 }),
+      cushion: new THREE.MeshStandardMaterial({ color: 0x37474F, roughness: 1.0 }),
       saddle: new THREE.MeshStandardMaterial({ color: 0x3E2723, roughness: 0.9 }),
       flagRed: new THREE.MeshBasicMaterial({ color: 0xD32F2F }),
       flagWhite: new THREE.MeshBasicMaterial({ color: 0xFFFFFF }),
       flagBlack: new THREE.MeshBasicMaterial({ color: 0x111111 }),
-      touristOrange: new THREE.MeshStandardMaterial({ color: 0xFF6D00 }),
+      touristOrange: new THREE.MeshStandardMaterial({ color: 0x4E342E }),
       bikeFrame: new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.5, metalness: 0.5 })
     };
 
