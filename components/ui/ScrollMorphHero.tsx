@@ -92,35 +92,27 @@ const MAX_SCROLL = 3000; // Virtual scroll range
 // Architecture / Design Unsplash Images
 // Tech & Landscape Mix Unsplash Images
 const IMAGES = [
-    // Atmospheric Nature / Landscapes
-    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&q=80", // Foggy forest
-    "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?w=300&q=80", // Minimal hills
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&q=80", // Yosemite lake reflection
-    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=300&q=80", // Mountains
-    "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=300&q=80", // Deep dark forest
-    "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=300&q=80", // Misty trees
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&q=80", // Sun through trees
-    "https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=300&q=80", // Moody coast
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&q=80", // Path in nature
-    "https://images.unsplash.com/photo-1506765515384-028b60a970df?w=300&q=80", // Green abstract
-
-    // Water / Reflections
-    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=300&q=80", // Mountain lake
-    "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=300&q=80", // Morning mist
-    "https://images.unsplash.com/photo-1511884642898-4c92249f20b6?w=300&q=80", // Pine forest
-
-    // Stones / Textures (Museum feel)
-    "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=300&q=80", // Stone texture
-    "https://images.unsplash.com/photo-1458668383970-8ddd3927d6a0?w=300&q=80", // Minerals
-
-    // Clouds / Sky
-    "https://images.unsplash.com/photo-1534088568595-a066f4d05577?w=300&q=80", // Stormy clouds
-    "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=300&q=80", // Galaxy night (subtle)
-
-    // Abstract Nature
-    "https://images.unsplash.com/photo-1497436072909-60f360e1d4b0?w=300&q=80", // Leaves detail
-    "https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=300&q=80", // Dark water
-    "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=300&q=80"  // Sunlight
+    // Reliable Nature / Landscape / Abstract Mix (High Availability)
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80", // Sun rays in forest
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80", // Foggy forest
+    "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&q=80", // Dark stone texture
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80", // Mountain range
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Forest path
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80", // Yosemite waters
+    "https://images.unsplash.com/photo-1511497584788-876760111969?w=800&q=80", // Misty pine forest
+    "https://images.unsplash.com/photo-1534088568595-a066f4d05577?w=800&q=80", // Stormy sky
+    "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=800&q=80", // Sunlight abstract
+    "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80", // Misty trees black & white vibe
+    "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=800&q=80", // Deep forest dark
+    "https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=800&q=80", // Moody coast
+    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=800&q=80", // Mountain lake reflection
+    "https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=800&q=80", // Dark water texture
+    "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800&q=80", // Forest light
+    "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=800&q=80", // Morning mist field
+    "https://images.unsplash.com/photo-1458668383970-8ddd3927d6a0?w=800&q=80", // Geological texture
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // Sea texture
+    "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80", // Snowy mountains night
+    "https://images.unsplash.com/photo-1439853949127-fa647821eba0?w=800&q=80", // Mountain layers
 ];
 
 // Helper for linear interpolation
