@@ -55,7 +55,9 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
     });
     renderer.setSize(width, height);
     // Cap pixel ratio to 1.25 to prevent lag on high-DPI screens while maintaining decent quality
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.25));
+    // Dynamic Resolution Setup
+    const maxPixelRatio = Math.min(window.devicePixelRatio, 1.25);
+    renderer.setPixelRatio(maxPixelRatio);
 
     renderer.shadowMap.enabled = true;
     // OPTIMIZATION: Switched to PCFShadowMap (faster than PCFSoftShadowMap)
@@ -79,10 +81,10 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
     dirLight.shadow.mapSize.height = 512;
     dirLight.shadow.camera.near = 10;
     dirLight.shadow.camera.far = 150;
-    dirLight.shadow.camera.left = -40;
-    dirLight.shadow.camera.right = 40;
-    dirLight.shadow.camera.top = 40;
-    dirLight.shadow.camera.bottom = -40;
+    dirLight.shadow.camera.left = -15;
+    dirLight.shadow.camera.right = 15;
+    dirLight.shadow.camera.top = 20;
+    dirLight.shadow.camera.bottom = -20;
     dirLight.shadow.bias = -0.0005;
     scene.add(dirLight);
 
@@ -727,6 +729,17 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
 
         camera.lookAt(0, 1.0, boatGroup.position.z - 20);
       }
+      // DYNAMIC RESOLUTION SCALING
+      // If dt > 40ms (~25fps) consistently, drop resolution
+      if (dt > 0.04) {
+        if (renderer.getPixelRatio() > 0.75) {
+          renderer.setPixelRatio(Math.max(0.75, renderer.getPixelRatio() * 0.99));
+        }
+      } else if (dt < 0.02 && renderer.getPixelRatio() < maxPixelRatio) {
+        // Recover quality if running smooth (>50fps)
+        renderer.setPixelRatio(Math.min(maxPixelRatio, renderer.getPixelRatio() + 0.001));
+      }
+
       renderer.render(scene, camera);
     };
     animate();
@@ -749,7 +762,24 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
         mountRef.current.removeChild(renderer.domElement);
       }
       if (animationId) cancelAnimationFrame(animationId);
-      if (renderer) renderer.dispose();
+
+      // Cleanup helper
+      const disposeNode = (node: any) => {
+        if (node.geometry) node.geometry.dispose();
+        if (node.material) {
+          if (Array.isArray(node.material)) {
+            node.material.forEach((m: any) => m.dispose());
+          } else {
+            node.material.dispose();
+          }
+        }
+      };
+
+      scene.traverse(disposeNode);
+      if (renderer) {
+        renderer.dispose();
+        renderer.forceContextLoss();
+      }
     };
   }, []);
 
