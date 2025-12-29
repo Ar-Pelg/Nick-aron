@@ -1,10 +1,10 @@
 {
   "url": "/",
   "hero": {
-    "label": "Digital Atelier",
-    "title_start": "Wij bouwen digitale",
-    "title_italic": "monumenten!",
-    "description": "Nick & Aron combineren technische perfectie met esthetische bezieling. Wij helpen merken om hun digitale identiteit te verheffen tot kunstvorm."
+    "label": "digital atelier",
+    "title_start": "Nick & Aron",
+    "title_italic": "",
+    "description": "Wij bouwen digitale ervaringen die raken."
   },
   "expertise": {
     "title_small": "Onze Expertise",

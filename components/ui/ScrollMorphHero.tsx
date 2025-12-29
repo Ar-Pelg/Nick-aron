@@ -120,9 +120,10 @@ interface ScrollMorphHeroProps {
     title: string;
     subtitle: string;
     label: string;
+    scrollProgress?: any; // MotionValue<number>
 }
 
-export default function ScrollMorphHero({ title, subtitle, label }: ScrollMorphHeroProps) {
+export default function ScrollMorphHero({ title, subtitle, label, scrollProgress }: ScrollMorphHeroProps) {
     const [introPhase, setIntroPhase] = useState<AnimationPhase>("scatter");
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
@@ -153,48 +154,28 @@ export default function ScrollMorphHero({ title, subtitle, label }: ScrollMorphH
     }, []);
 
     // --- Virtual Scroll Logic ---
-    const virtualScroll = useMotionValue(0);
-    const scrollRef = useRef(0); // Keep track of scroll value without re-renders
+    const internalScroll = useMotionValue(0);
+    const scrollRef = useRef(0);
+
+    // If external scrollProgress is provided, map it to our 0-3000 range
+    // Otherwise use internal wheel logic
+    const virtualScroll = useTransform(
+        scrollProgress || internalScroll,
+        [0, 1],
+        [0, MAX_SCROLL]
+    );
 
     useEffect(() => {
+        // If we have external scroll control, don't use wheel listeners
+        if (scrollProgress) return;
+
         const container = containerRef.current;
         if (!container) return;
 
         const handleWheel = (e: WheelEvent) => {
-            // Prevent default to stop browser overscroll/bounce
-            // Note: In a real "Hero" section, we might NOT want to prevent default 
-            // if we want the user to be able to scroll DOWN to the rest of the page.
-            // But this effect relies on "capturing" the scroll.
-            // Compromise: Only capture if we haven't "completed" the animation?
-            // For now, let's keep the "virtual scroll" confined to this component just for the effect,
-            // but maybe allow natural page scroll too? 
-            // The provided code prevents default. We will allow default but map page scroll if possible?
-            // Actually, let's stick to the visual effect first. 
-            // If it's a "Hero", maybe we want to map window.scrollY instead of capturing wheel?
-
-            // Let's use window scroll instead of capturing wheel to make it natural
-            // BUT the effect expects 0-3000 range.
-            // We'll leave the captured wheel for the 'demo' feel as requested, 
-            // but in a real site this might block scrolling down.
-            // REVISION: Let's map it to window.scrollY in the parent usage or accept it?
-            // For this specific request, I'll stick to the proven "wheel capture" logic 
-            // BUT I will modify it to not e.preventDefault() if we are at the end, 
-            // allowing user to escape.
-
-            // Actually, let's just Map it to useScroll from framer motion in the future.
-            // For now, to ensure it works as the user saw in the demo, I'll keep the logic
-            // but remove preventDefault so the page can actually scroll.
-
-            // e.preventDefault(); 
-
-            // Capture scroll for the effect, but let the page move?
-            // If the page moves, the component moves out of view.
-            // So usually these effects are "sticky".
-            // I will make the parent component handle the sticky behavior.
-
             const newScroll = Math.min(Math.max(scrollRef.current + e.deltaY, 0), MAX_SCROLL);
             scrollRef.current = newScroll;
-            virtualScroll.set(newScroll);
+            internalScroll.set(newScroll);
         };
 
         // Touch support
@@ -209,7 +190,7 @@ export default function ScrollMorphHero({ title, subtitle, label }: ScrollMorphH
 
             const newScroll = Math.min(Math.max(scrollRef.current + deltaY, 0), MAX_SCROLL);
             scrollRef.current = newScroll;
-            virtualScroll.set(newScroll);
+            internalScroll.set(newScroll);
         };
 
         container.addEventListener("wheel", handleWheel, { passive: false });
@@ -221,7 +202,7 @@ export default function ScrollMorphHero({ title, subtitle, label }: ScrollMorphH
             container.removeEventListener("touchstart", handleTouchStart);
             container.removeEventListener("touchmove", handleTouchMove);
         };
-    }, [virtualScroll]);
+    }, [internalScroll, scrollProgress]);
 
     // 1. Morph Progress: 0 (Circle) -> 1 (Bottom Arc)
     const morphProgress = useTransform(virtualScroll, [0, 600], [0, 1]);
