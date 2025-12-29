@@ -37,9 +37,6 @@ _inputs:
           - label: "Afbeelding"
             image: true
             value: ""
-  url:
-    label: "URL"
-    type: text
 
 _structures:
   projects:
