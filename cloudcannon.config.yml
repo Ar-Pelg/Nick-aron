@@ -15,6 +15,9 @@ collections_config:
 
 # 3. Zorg dat de inputs nette labels krijgen
 _inputs:
+  img:
+    label: "Afbeelding"
+    type: image
   url:
     hidden: true
   hero_label:
