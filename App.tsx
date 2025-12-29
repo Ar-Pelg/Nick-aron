@@ -71,7 +71,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className={`min-h-screen bg-[#FAFAFA] text-neutral-900 selection:bg-neutral-900 selection:text-white font-sans antialiased cursor-none`}>
+    <div className={`min-h-screen bg-[#FAFAFA] text-neutral-900 selection:bg-neutral-900 selection:text-white font-sans antialiased`}>
       <CustomCursor />
       <TracingLine />
       <Navbar />
