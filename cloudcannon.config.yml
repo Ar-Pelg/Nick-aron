@@ -43,9 +43,6 @@ _structures:
       - label: "Afbeelding"
         image: true
         value: ""
-        _inputs:
-          value:
-            type: image
 
   projects:
     values:
