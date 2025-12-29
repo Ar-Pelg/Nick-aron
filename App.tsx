@@ -11,6 +11,7 @@ import { Footer } from './sections/Footer';
 import { ProjectDetail, ProjectData } from './components/ProjectDetail';
 import { Preloader } from './components/Preloader';
 import { LabGame } from './components/LabGame';
+import contentData from './content/home.json';
 
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
