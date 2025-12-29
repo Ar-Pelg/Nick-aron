@@ -9,15 +9,15 @@ import { HorizontalGallery } from './sections/HorizontalGallery';
 import { AboutSection } from './sections/AboutSection';
 import { Footer } from './sections/Footer';
 import { ProjectDetail, ProjectData } from './components/ProjectDetail';
-import contentData from './content/home.json';
-
 import { Preloader } from './components/Preloader';
+import { LabGame } from './components/LabGame';
 
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
   const [content, setContent] = useState(contentData);
   const [isEditor, setIsEditor] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLabOpen, setIsLabOpen] = useState(false);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -84,9 +84,18 @@ export default function App() {
         )}
       </AnimatePresence>
 
+      <AnimatePresence>
+        {isLabOpen && (
+          <LabGame
+            onClose={() => setIsLabOpen(false)}
+            onComplete={() => console.log('Game Completed')}
+          />
+        )}
+      </AnimatePresence>
+
       <CustomCursor />
       <TracingLine />
-      <Navbar />
+      <Navbar onOpenLab={() => setIsLabOpen(true)} />
 
       <main>
         <Hero data={content.hero} isEditor={isEditor} />
