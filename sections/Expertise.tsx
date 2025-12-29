@@ -24,7 +24,7 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
         </h2>
         <RevealText disabled={isEditor}>
           <p
-            className="font-serif text-4xl md:text-5xl max-w-4xl leading-tight"
+            className="font-serif text-4xl md:text-5xl max-w-4xl leading-tight pb-2"
           >
             {safeData.title_large}
           </p>
