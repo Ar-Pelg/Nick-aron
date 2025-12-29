@@ -36,12 +36,8 @@ _inputs:
   detailImages:
     label: "Detail Afbeeldingen"
     type: array
-    options:
-      structures:
-        values:
-          - label: "Afbeelding"
-            image: true
-            value: ""
+    values:
+      type: image
 
 _structures:
   projects:
