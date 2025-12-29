@@ -10,6 +10,7 @@ collections_config:
     url: /
     output: false
     _enabled_editors:
+      - visual
       - data
 
 # 3. Zorg dat de inputs nette labels krijgen

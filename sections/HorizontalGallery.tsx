@@ -33,7 +33,7 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
       const neededScrollVW = totalWidthVW - viewportWidthVW;
 
       // Add a little buffer (5vw) to ensure last item clears nicely
-      const finalScroll = Math.max(0, neededScrollVW + 5);
+      const finalScroll = Math.max(0, neededScrollVW);
 
       setScrollRange(`-${finalScroll}vw`);
     };
