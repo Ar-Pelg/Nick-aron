@@ -8,7 +8,7 @@
   },
   "expertise": {
     "title_small": "Onze Expertise",
-    "title_large": "Wij vertalen complexe vraagstukken naar heldere, digitale producten. Van strategisch fundament tot pixel-perfecte executie.",
+    "title_large": "Wij vertalen complexe uitdagingen naar simpele oplossingen. Slimme strategie, strak design en code die staat als een huis.",
     "items": [
       {
         "number": "1",
@@ -109,11 +109,11 @@
   ],
   "about": {
     "philosophy_title": "Filosofie",
-    "philosophy_quote_start": "Wij geloven dat digitale perfectie ontstaat waar",
-    "philosophy_quote_highlight1": "reductie",
+    "philosophy_quote_start": "Wij bouwen high-end digitale producten met",
+    "philosophy_quote_highlight1": "technische precisie",
     "philosophy_quote_mid": "en",
-    "philosophy_quote_highlight2": "expressie",
-    "philosophy_quote_end": "elkaar ontmoeten."
+    "philosophy_quote_highlight2": "Amsterdamse nuchterheid",
+    "philosophy_quote_end": "."
   },
   "footer": {
     "title_start": "Let's",
