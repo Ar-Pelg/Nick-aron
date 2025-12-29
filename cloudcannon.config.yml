@@ -18,6 +18,9 @@ _inputs:
   img:
     label: "Afbeelding"
     type: image
+  number:
+    label: "Nummer"
+    type: text
   url:
     hidden: true
   hero_label:
