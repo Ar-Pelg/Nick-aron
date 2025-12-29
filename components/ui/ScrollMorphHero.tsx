@@ -371,7 +371,6 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
 
                         return (
                             <FlipCard
-                                key={i}
                                 src={src}
                                 index={i}
                                 total={TOTAL_IMAGES}
