@@ -43,9 +43,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLab }) => {
           </Magnetic>
 
           <Magnetic>
-            <div>
+            <a href="#contact" className="block">
               <Button variant="primary" className="px-6 py-2 text-xs" data-cursor="Start">Start Project</Button>
-            </div>
+            </a>
           </Magnetic>
         </div>
       </div>
