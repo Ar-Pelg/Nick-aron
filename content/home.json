@@ -125,7 +125,7 @@
       "year": "2025",
       "client": "Klantnaam",
       "role": "Jouw Rol",
-      "img": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=1600&auto=format&fit=crop",
+      "img": "/public/uploads/land-o-lakes-inc-o8gguhfjb2m-unsplash.jpg",
       "desc": "Beschrijving van het project...",
       "detailImages": []
     }
