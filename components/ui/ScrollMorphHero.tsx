@@ -90,27 +90,37 @@ const TOTAL_IMAGES = 20;
 const MAX_SCROLL = 3000; // Virtual scroll range
 
 // Architecture / Design Unsplash Images
+// Tech & Landscape Mix Unsplash Images
 const IMAGES = [
-    "https://images.unsplash.com/photo-1600607686527-6fb886090705?w=300&q=80",
-    "https://images.unsplash.com/photo-1545989253-02cc26577f88?w=300&q=80",
-    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&q=80",
-    "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=300&q=80",
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&q=80",
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&q=80",
-    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&q=80",
-    "https://images.unsplash.com/photo-1506765515384-028b60a970df?w=300&q=80",
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&q=80",
-    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=300&q=80",
-    "https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=300&q=80",
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&q=80",
-    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&q=80",
-    "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=300&q=80",
-    "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=300&q=80",
-    "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=300&q=80",
-    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=300&q=80",
-    "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=300&q=80",
-    "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=300&q=80",
-    "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=300&q=80"
+    // Tech / Abstract / Future
+    "https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&q=80", // Chip
+    "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=300&q=80", // Matrix code vibe
+    "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=300&q=80", // Cyberpunk city
+    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&q=80", // Globe network
+    "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=300&q=80", // Code screen
+    "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=300&q=80", // Abstract lines
+    "https://images.unsplash.com/photo-1531297461136-82lwDe43qR8w?w=300&q=80", // Hardware macro
+
+    // Landscapes (Atmospheric/Minimal)
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&q=80", // Foggy forest
+    "https://images.unsplash.com/photo-1499346030926-9a72daac6c63?w=300&q=80", // Minimal hills
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&q=80", // Yosemite lake
+
+    // More Tech
+    "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2?w=300&q=80", // Laptop abstract
+    "https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=300&q=80", // Neon programmer
+    "https://images.unsplash.com/photo-1504384308090-c54be3855091?w=300&q=80", // Holographic
+    "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300&q=80", // Tech lab
+
+    // More Landscapes
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=300&q=80", // Mountains
+    "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=300&q=80", // Deep forest
+
+    // Tech Finish
+    "https://images.unsplash.com/photo-1515630278258-407f66498911?w=300&q=80", // Light trails
+    "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&q=80", // Building abstract
+    "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=300&q=80", // Retro tech
+    "https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?w=300&q=80", // Data abstract
 ];
 
 // Helper for linear interpolation
