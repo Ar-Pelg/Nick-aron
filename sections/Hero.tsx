@@ -50,52 +50,35 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
 
       <div className="relative z-20 text-center max-w-5xl px-6">
         {/* --- LABEL --- */}
-        {isEditor ? (
+        <RevealText className="inline-block" delay={0.2} disabled={isEditor}>
           <span
-            suppressContentEditableWarning={true}
-            className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white cursor-text"
+            className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white"
             data-cms-bind="#hero.label"
+            suppressContentEditableWarning={true}
           >
             {safeContent.label}
           </span>
-        ) : (
-          <RevealText className="inline-block" delay={0.2}>
-            <span className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white">
-              {safeContent.label}
-            </span>
-          </RevealText>
-        )}
+        </RevealText>
 
         {/* --- TITEL --- */}
         <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-neutral-900 mb-8 tracking-tight cursor-default">
-          {isEditor ? (
-            <>
-              <span
-                suppressContentEditableWarning={true}
-                data-cms-bind="#hero.title_start"
-              >
-                {safeContent.title_start}
-              </span>
-              <span
-                suppressContentEditableWarning={true}
-                className="italic text-neutral-400 font-light ml-2 md:ml-4"
-                data-cms-bind="#hero.title_italic"
-              >
-                {safeContent.title_italic}
-              </span>
-            </>
-          ) : (
-            <>
-              <RevealText delay={0.3}>
-                <span>{safeContent.title_start}</span>
-              </RevealText>
-              <RevealText delay={0.4}>
-                <span className="italic text-neutral-400 font-light ml-2 md:ml-4">
-                  {safeContent.title_italic}
-                </span>
-              </RevealText>
-            </>
-          )}
+          <RevealText delay={0.3} disabled={isEditor}>
+            <span
+              data-cms-bind="#hero.title_start"
+              suppressContentEditableWarning={true}
+            >
+              {safeContent.title_start}
+            </span>
+          </RevealText>
+          <RevealText delay={0.4} disabled={isEditor}>
+            <span
+              className="italic text-neutral-400 font-light ml-2 md:ml-4"
+              data-cms-bind="#hero.title_italic"
+              suppressContentEditableWarning={true}
+            >
+              {safeContent.title_italic}
+            </span>
+          </RevealText>
         </h1>
 
         {/* --- OMSCHRIJVING --- */}

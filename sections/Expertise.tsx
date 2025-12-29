@@ -24,7 +24,7 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
         >
           {safeData.title_small}
         </h2>
-        <RevealText>
+        <RevealText disabled={isEditor}>
           <p
             className="font-serif text-4xl md:text-5xl max-w-4xl leading-tight"
             data-cms-bind="#expertise.title_large"

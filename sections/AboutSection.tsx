@@ -51,7 +51,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
 
         {/* GLASS CARD 1: Philosophy */}
         <div className={`max-w-4xl mx-auto mb-24 p-12 bg-neutral-900/40 backdrop-blur-md border border-white/10 shadow-2xl ${!isEditor ? 'pointer-events-auto' : ''}`}>
-          <RevealText>
+          <RevealText disabled={isEditor}>
             <h4
               className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-8 border-b border-white/10 pb-4 inline-block"
               data-cms-bind="#about.philosophy_title"
@@ -70,7 +70,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16">
             {safeData.grid_items && safeData.grid_items.map((item: any, i: number) => (
               <div key={i}>
-                <RevealText delay={0.1 * i}>
+                <RevealText delay={0.1 * i} disabled={isEditor}>
                   <h5 className="font-serif text-3xl mb-4 text-white drop-shadow-sm flex items-center gap-3">
                     <span className="w-2 h-2 bg-neutral-500 rounded-full"></span>
                     {item.title}

@@ -5,9 +5,14 @@ interface RevealTextProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
+  disabled?: boolean;
 }
 
-export const RevealText: React.FC<RevealTextProps> = ({ children, className = '', delay = 0 }) => {
+export const RevealText: React.FC<RevealTextProps> = ({ children, className = '', delay = 0, disabled = false }) => {
+  if (disabled) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <div className={`overflow-hidden ${className}`}>
       <motion.div
