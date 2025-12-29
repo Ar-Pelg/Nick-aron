@@ -31,8 +31,8 @@ export const Footer: React.FC<FooterProps> = ({ data, isEditor }) => {
 
                <div>
                   <h2 className="font-serif text-6xl md:text-8xl lg:text-9xl mb-12 leading-[0.8] relative z-10">
-                     <RevealText disabled={isEditor}><span data-cms-bind="#footer.title_start" suppressContentEditableWarning={true}>{safeData.title_start}</span></RevealText>
-                     <RevealText delay={0.1} disabled={isEditor}>
+                     <RevealText disabled={isEditor} as="span"><span data-cms-bind="#footer.title_start" suppressContentEditableWarning={true}>{safeData.title_start}</span></RevealText>
+                     <RevealText delay={0.1} disabled={isEditor} as="span">
                         <span
                            className="italic text-neutral-500"
                            data-cms-bind="#footer.title_italic"

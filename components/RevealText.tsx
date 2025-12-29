@@ -6,23 +6,27 @@ interface RevealTextProps {
   className?: string;
   delay?: number;
   disabled?: boolean;
+  as?: 'div' | 'span';
 }
 
-export const RevealText: React.FC<RevealTextProps> = ({ children, className = '', delay = 0, disabled = false }) => {
+export const RevealText: React.FC<RevealTextProps> = ({ children, className = '', delay = 0, disabled = false, as: Tag = 'div' }) => {
   if (disabled) {
-    return <div className={className}>{children}</div>;
+    return <Tag className={className}>{children}</Tag>;
   }
 
+  const MotionTag = Tag === 'span' ? motion.span : motion.div;
+
   return (
-    <div className={`overflow-hidden ${className}`}>
-      <motion.div
+    <Tag className={`overflow-hidden ${className}`}>
+      <MotionTag
         initial={{ y: "100%" }}
         whileInView={{ y: 0 }}
         viewport={{ once: true, margin: "-10%" }}
         transition={{ duration: 0.8, delay, ease: [0.76, 0, 0.24, 1] }}
+        style={{ display: Tag === 'span' ? 'inline-block' : 'block' }}
       >
         {children}
-      </motion.div>
-    </div>
+      </MotionTag>
+    </Tag>
   );
 };

@@ -62,7 +62,7 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
 
         {/* --- TITEL --- */}
         <h1 className="font-serif text-6xl md:text-8xl lg:text-[7rem] leading-[0.9] text-neutral-900 mb-8 tracking-tight cursor-default">
-          <RevealText delay={0.3} disabled={isEditor}>
+          <RevealText delay={0.3} disabled={isEditor} as="span">
             <span
               data-cms-bind="#hero.title_start"
               suppressContentEditableWarning={true}
@@ -70,7 +70,7 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
               {safeContent.title_start}
             </span>
           </RevealText>
-          <RevealText delay={0.4} disabled={isEditor}>
+          <RevealText delay={0.4} disabled={isEditor} as="span">
             <span
               className="italic text-neutral-400 font-light ml-2 md:ml-4"
               data-cms-bind="#hero.title_italic"
