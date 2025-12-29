@@ -11,10 +11,13 @@ import { Footer } from './sections/Footer';
 import { ProjectDetail, ProjectData } from './components/ProjectDetail';
 import contentData from './content/home.json';
 
+import { Preloader } from './components/Preloader';
+
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
   const [content, setContent] = useState(contentData);
   const [isEditor, setIsEditor] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -29,6 +32,8 @@ export default function App() {
         if (inCloudCannon) {
           // console.log("✅ CloudCannon detected");
           setIsEditor(true);
+          // Don't show preloader in editor
+          setIsLoading(false);
           // Stop polling once found
           if (intervalId) clearInterval(intervalId);
         }
@@ -43,6 +48,7 @@ export default function App() {
       if (e.detail && e.detail.CloudCannon) {
         setContent({ ...e.detail.CloudCannon });
         setIsEditor(true);
+        setIsLoading(false);
         if (intervalId) clearInterval(intervalId);
       }
     };
@@ -72,6 +78,12 @@ export default function App() {
 
   return (
     <div className={`min-h-screen bg-[#FAFAFA] text-neutral-900 selection:bg-neutral-900 selection:text-white font-sans antialiased`}>
+      <AnimatePresence>
+        {isLoading && !isEditor && (
+          <Preloader onComplete={() => setIsLoading(false)} />
+        )}
+      </AnimatePresence>
+
       <CustomCursor />
       <TracingLine />
       <Navbar />
