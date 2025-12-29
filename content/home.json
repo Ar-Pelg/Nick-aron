@@ -120,14 +120,16 @@
       ]
     },
     {
-      "title": "Nieuw Project",
+      "title": "Nieuw Project 2",
       "cat": "Categorie",
       "year": "2025",
       "client": "Klantnaam",
       "role": "Jouw Rol",
       "img": "/public/uploads/land-o-lakes-inc-o8gguhfjb2m-unsplash.jpg",
       "desc": "Beschrijving van het project...",
-      "detailImages": []
+      "detailImages": [
+        "/public/uploads/land-o-lakes-inc-o8gguhfjb2m-unsplash-1.jpg"
+      ]
     }
   ],
   "about": {
