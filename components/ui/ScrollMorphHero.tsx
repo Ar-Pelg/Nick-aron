@@ -49,7 +49,7 @@ function FlipCard({
                 transformStyle: "preserve-3d", // Essential for the 3D hover effect
                 perspective: "1000px",
             }}
-            className="cursor-pointer group"
+            className="cursor-pointer group pointer-events-auto"
         >
             <motion.div
                 className="relative h-full w-full"
@@ -271,7 +271,7 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
     const contentY = useTransform(smoothMorph, [0.8, 1], [20, 0]);
 
     return (
-        <div ref={containerRef} className="relative w-full h-full bg-[#FAFAFA] min-h-screen">
+        <div ref={containerRef} className="relative w-full h-full min-h-screen">
             <div className="flex h-full w-full flex-col items-center justify-center perspective-1000">
 
                 {/* Intro Text */}
