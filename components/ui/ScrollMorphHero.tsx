@@ -108,9 +108,9 @@ const IMAGES = [
     "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=800&q=80", // Mountain lake reflection
     "https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=800&q=80", // Dark water texture
     "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800&q=80", // Forest light
-    "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800&q=80", // Morning mist field (Corrected)
-    "https://images.unsplash.com/photo-1501854140884-074bf86ee90c?w=800&q=80", // Nature texture (Replacement for broken link)
-    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // Sea texture
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80", // Mountain range (Backup)
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Forest path (Backup)
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80", // Yosemite waters (Backup)
     "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80", // Snowy mountains night
     "https://images.unsplash.com/photo-1439853949127-fa647821eba0?w=800&q=80", // Mountain layers
 ];
