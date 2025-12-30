@@ -100,7 +100,7 @@ const IMAGES = [
     "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Forest path
     "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80", // Yosemite waters
     "https://images.unsplash.com/photo-1428908728789-d2de25dbd4e2?w=800&q=80", // Misty pine forest (Corrected)
-    "https://images.unsplash.com/photo-1534088568595-a066f4d05577?w=800&q=80", // Stormy sky
+    "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=800&q=80", // Northern lights (Replacement for broken link)
     "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=800&q=80", // Sunlight abstract
     "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80", // Misty trees black & white vibe
     "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=800&q=80", // Deep forest dark
@@ -109,7 +109,7 @@ const IMAGES = [
     "https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=800&q=80", // Dark water texture
     "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800&q=80", // Forest light
     "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800&q=80", // Morning mist field (Corrected)
-    "https://images.unsplash.com/photo-1458668383970-8ddd3927d6a0?w=800&q=80", // Geological texture
+    "https://images.unsplash.com/photo-1542259681-d22744749f76?w=800&q=80", // Forest road (Replacement for broken link)
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // Sea texture
     "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80", // Snowy mountains night
     "https://images.unsplash.com/photo-1439853949127-fa647821eba0?w=800&q=80", // Mountain layers
@@ -271,7 +271,7 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
     const contentY = useTransform(smoothMorph, [0.8, 1], [20, 0]);
 
     return (
-        <div ref={containerRef} className="relative w-full h-full bg-[#FAFAFA] overflow-hidden min-h-screen">
+        <div ref={containerRef} className="relative w-full h-full bg-[#FAFAFA] min-h-screen">
             <div className="flex h-full w-full flex-col items-center justify-center perspective-1000">
 
                 {/* Intro Text */}

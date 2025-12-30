@@ -38,7 +38,7 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
 
   return (
     <section ref={targetRef} className="relative h-[300vh] bg-[#FAFAFA]">
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="sticky top-0 h-screen z-40">
         <ScrollMorphHero
           title={fullTitle}
           subtitle={safeContent.description}
