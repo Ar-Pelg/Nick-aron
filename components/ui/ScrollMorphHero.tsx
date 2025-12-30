@@ -109,7 +109,7 @@ const IMAGES = [
     "https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=800&q=80", // Dark water texture
     "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800&q=80", // Forest light
     "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800&q=80", // Morning mist field (Corrected)
-    "https://images.unsplash.com/photo-1542259681-d22744749f76?w=800&q=80", // Forest road (Replacement for broken link)
+    "https://images.unsplash.com/photo-1501854140884-074bf86ee90c?w=800&q=80", // Nature texture (Replacement for broken link)
     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80", // Sea texture
     "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80", // Snowy mountains night
     "https://images.unsplash.com/photo-1439853949127-fa647821eba0?w=800&q=80", // Mountain layers
@@ -207,11 +207,11 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
     }, [internalScroll, scrollProgress]);
 
     // 1. Morph Progress: 0 (Circle) -> 1 (Bottom Arc)
-    const morphProgress = useTransform(virtualScroll, [0, 600], [0, 1]);
+    const morphProgress = useTransform(virtualScroll, [0, 1000], [0, 1]);
     const smoothMorph = useSpring(morphProgress, { stiffness: 40, damping: 20 });
 
     // 2. Scroll Rotation
-    const scrollRotate = useTransform(virtualScroll, [600, 3000], [0, 360]);
+    const scrollRotate = useTransform(virtualScroll, [1000, 3000], [0, 360]);
     const smoothScrollRotate = useSpring(scrollRotate, { stiffness: 40, damping: 20 });
 
     // --- Mouse Parallax ---
