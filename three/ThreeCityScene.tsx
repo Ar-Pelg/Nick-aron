@@ -161,7 +161,8 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
 
     // 6. Geometry & Instancing setup
     // OPTIMIZATION: Reduced world size. We loop at 600, so we don't need 1600 units of geometry.
-    const canalLength = 1000;
+    // UPDATE: Increased to 2400 to ensure coverage across the full loop range (-600 to 0 and beyond).
+    const canalLength = 2400;
 
     const canalGeo = new THREE.PlaneGeometry(12, canalLength, 4, 64);
     const canal = new THREE.Mesh(canalGeo, materials.water);
