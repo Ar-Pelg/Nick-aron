@@ -32,15 +32,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLab }) => {
             </Magnetic>
           ))}
 
-          <Magnetic>
-            <button
-              onClick={onOpenLab}
+          {/* 
+            <Magnetic>
+            <button 
+              onClick={onOpenLab} 
               className="group flex items-center gap-2 cursor-pointer"
             >
               <span className="w-2 h-2 rounded-full bg-amber-500 group-hover:animate-ping" />
               <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-400 group-hover:text-amber-600 transition-colors">Lab</span>
             </button>
-          </Magnetic>
+            </Magnetic> 
+          */}
 
           <Magnetic>
             <a href="#contact" className="block">

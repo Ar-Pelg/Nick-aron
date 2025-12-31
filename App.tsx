@@ -10,7 +10,6 @@ import { AboutSection } from './sections/AboutSection';
 import { Footer } from './sections/Footer';
 import { ProjectDetail, ProjectData } from './components/ProjectDetail';
 import { Preloader } from './components/Preloader';
-import { LabGame } from './components/LabGame';
 import contentData from './content/home.json';
 
 export default function App() {
@@ -18,7 +17,6 @@ export default function App() {
   const [content, setContent] = useState(contentData);
   const [isEditor, setIsEditor] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLabOpen, setIsLabOpen] = useState(false);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
@@ -85,20 +83,11 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {isLabOpen && (
-          <LabGame
-            onClose={() => setIsLabOpen(false)}
-            onComplete={() => console.log('Game Completed')}
-          />
-        )}
-      </AnimatePresence>
-
       <CustomCursor />
 
       {/* Main Content Wrapper - Slides over the Footer */}
       <div className="relative z-10 bg-[#FAFAFA] mb-[80vh] shadow-2xl rounded-b-3xl">
-        <Navbar onOpenLab={() => setIsLabOpen(true)} />
+        <Navbar onOpenLab={() => { }} />
 
         <main>
           <Hero
