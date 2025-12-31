@@ -21,19 +21,19 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
       const numProjects = projects ? projects.length : 0;
 
       // Estimated widths in VW
-      // Desktop: Intro (~40vw) + Projects (50vw each) + Gaps
-      // Mobile: Intro (~80vw) + Projects (80vw each) + Gaps
-      const introWidth = isMobile ? 85 : 45;
-      const projectWidth = isMobile ? 85 : 55;
+      // Desktop: Intro (~30vw) + Projects (45vw each) + Gaps (10vw each)
+      const introWidth = isMobile ? 90 : 35;
+      const projectWidth = isMobile ? 85 : 45;
+      const gapWidth = isMobile ? 10 : 15; // Increased gap
 
-      const totalWidthVW = introWidth + (numProjects * projectWidth);
+      const totalWidthVW = introWidth + (numProjects * (projectWidth + gapWidth));
       const viewportWidthVW = 100;
 
       // We need to move enough to see the end, so total width minus viewport
       const neededScrollVW = totalWidthVW - viewportWidthVW;
 
-      // Add a little buffer (5vw) to ensure last item clears nicely
-      const finalScroll = Math.max(0, neededScrollVW);
+      // Add a little buffer
+      const finalScroll = Math.max(0, neededScrollVW + 5);
 
       setScrollRange(`-${finalScroll}vw`);
     };
@@ -52,62 +52,79 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
 
   const safeData = data || {
     title_small: "Geselecteerd Werk",
-    title_large_start: "Esthetiek ontmoet",
-    title_large_italic: "Functionaliteit.",
-    description: "",
+    title_large_start: "Esthetiek",
+    title_large_italic: "& Functie",
+    description: "Een curatie van digitale ervaringen.",
     scroll_text: "Scroll om te ontdekken"
   };
 
   return (
     <section ref={targetRef} className="relative h-[300vh] bg-neutral-900 text-white" id="projecten">
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        <div className="absolute top-12 left-6 md:left-12 z-20">
-          <h2
-            className="text-xs uppercase tracking-[0.2em] text-neutral-400"
-          >
+
+        {/* Intro Section - Static visual anchor */}
+        <div className="absolute top-12 left-6 md:left-12 z-20 pointer-events-none">
+          <h2 className="text-xs uppercase tracking-[0.2em] text-neutral-500">
             {safeData.title_small}
           </h2>
         </div>
 
-        <motion.div style={{ x }} className="flex gap-12 pl-6 md:pl-12 will-change-transform">
-          <div className="flex-shrink-0 w-[80vw] md:w-[40vw] flex flex-col justify-center pr-20">
-            <h3 className="font-serif text-5xl md:text-7xl mb-8 leading-none">
-              <span>{safeData.title_large_start}</span> <br />
-              <span className="italic text-neutral-500">{safeData.title_large_italic}</span>
+        <motion.div style={{ x }} className="flex gap-12 md:gap-40 pl-6 md:pl-12 will-change-transform items-center h-full">
+
+          {/* Intro Card */}
+          <div className="flex-shrink-0 w-[80vw] md:w-[30vw] flex flex-col justify-center pr-12">
+            <h3 className="font-serif text-6xl md:text-8xl mb-8 leading-[0.9]">
+              <span className="opacity-40">{safeData.title_large_start}</span> <br />
+              <span className="italic text-white">{safeData.title_large_italic}</span>
             </h3>
-            <p
-              className="text-neutral-400 font-light text-lg max-w-md mb-8"
-            >
+            <p className="text-neutral-500 font-light text-lg mb-12 max-w-xs leading-relaxed">
               {safeData.description}
             </p>
-            <div className="flex items-center gap-4 text-xs uppercase tracking-widest">
-              <div className="w-12 h-[1px] bg-white" />
+            <div className="flex items-center gap-4 text-xs uppercase tracking-widest text-neutral-600">
+              <div className="w-8 h-[1px] bg-neutral-700" />
               <span>{safeData.scroll_text}</span>
             </div>
           </div>
 
+          {/* Project Cards - Museum Style */}
           {projects && projects.map((project, i) => (
             <div
               key={i}
-              className="relative group flex-shrink-0 w-[80vw] md:w-[50vw] h-[70vh] overflow-hidden bg-neutral-800 cursor-pointer"
-              data-cursor="Bekijk Case"
+              className="relative group flex-shrink-0 w-[85vw] md:w-[45vw] flex flex-col gap-6 cursor-none"
               onClick={() => onSelectProject(project)}
             >
-              <img
-                src={project.img.startsWith('/public') ? project.img.substring(7) : project.img}
-                alt={project.title}
-                loading="lazy"
-                decoding="async"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-60 group-hover:opacity-100"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
-              <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full">
-                <span className="text-xs uppercase tracking-widest text-neutral-400 mb-2 block">{project.cat}</span>
-                <h4 className="font-serif text-4xl md:text-6xl text-white mb-6">{project.title}</h4>
-                <Button variant="white" className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">Bekijk Case</Button>
+              {/* Image Frame */}
+              <div
+                className="relative w-full aspect-[4/3] md:aspect-[16/10] overflow-hidden bg-neutral-800"
+                data-cursor="Bekijk"
+              >
+                <img
+                  src={project.img.startsWith('/public') ? project.img.substring(7) : project.img}
+                  alt={project.title}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 grayscale-[0.2] group-hover:grayscale-0"
+                />
+              </div>
+
+              {/* Caption */}
+              <div className="flex justify-between items-start border-t border-neutral-800 pt-6 transition-colors duration-500 group-hover:border-neutral-600">
+                <div>
+                  <span className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">{project.cat}</span>
+                  <h4 className="font-serif text-3xl md:text-4xl text-neutral-300 group-hover:text-white transition-colors duration-300">
+                    {project.title}
+                  </h4>
+                </div>
+                <div className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <Button variant="white" className="text-xs px-6 py-2">Bekijk Case</Button>
+                </div>
               </div>
             </div>
           ))}
+
+          {/* Spacer at end */}
+          <div className="w-[10vw] flex-shrink-0" />
+
         </motion.div>
       </div>
     </section>
