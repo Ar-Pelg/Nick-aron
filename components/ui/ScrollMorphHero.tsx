@@ -68,7 +68,7 @@ function FlipCard({
                     <img
                         src={src}
                         alt={`hero-${index}`}
-                        className="h-full w-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                        className="h-full w-full object-cover transition-all duration-500"
                     />
                     <div className="absolute inset-0 bg-neutral-900/10 transition-colors group-hover:bg-transparent" />
                 </div>
