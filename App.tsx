@@ -78,7 +78,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className={`min-h-screen bg-[#FAFAFA] text-neutral-900 selection:bg-neutral-900 selection:text-white font-sans antialiased`}>
+    <div className={`min-h-screen text-neutral-900 selection:bg-neutral-900 selection:text-white font-sans antialiased`}>
       <AnimatePresence>
         {isLoading && !isEditor && (
           <Preloader onComplete={() => setIsLoading(false)} />
@@ -95,20 +95,24 @@ export default function App() {
       </AnimatePresence>
 
       <CustomCursor />
-      <TracingLine />
-      <Navbar onOpenLab={() => setIsLabOpen(true)} />
 
-      <main>
-        <Hero data={content.hero} isEditor={isEditor} />
-        <Expertise data={content.expertise} isEditor={isEditor} />
-        <HorizontalGallery
-          data={content.projects_section}
-          projects={content.projects}
-          onSelectProject={setSelectedProject}
-          isEditor={isEditor}
-        />
-        <AboutSection data={content.about} isEditor={isEditor} />
-      </main>
+      {/* Main Content Wrapper - Slides over the Footer */}
+      <div className="relative z-10 bg-[#FAFAFA] mb-[80vh] shadow-2xl rounded-b-3xl">
+        <TracingLine />
+        <Navbar onOpenLab={() => setIsLabOpen(true)} />
+
+        <main>
+          <Hero data={content.hero} isEditor={isEditor} />
+          <Expertise data={content.expertise} isEditor={isEditor} />
+          <HorizontalGallery
+            data={content.projects_section}
+            projects={content.projects}
+            onSelectProject={setSelectedProject}
+            isEditor={isEditor}
+          />
+          <AboutSection data={content.about} isEditor={isEditor} />
+        </main>
+      </div>
 
       <Footer data={content.footer} isEditor={isEditor} />
 
