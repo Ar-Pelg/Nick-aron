@@ -38,7 +38,7 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
       <div ref={itemsRef} className="relative z-10">
         <TracingLine
           containerRef={itemsRef}
-          className="absolute inset-0 pointer-events-none hidden md:block z-0"
+          className="absolute left-0 right-0 bottom-0 top-24 pointer-events-none hidden md:block z-0"
         />
         {safeData.items && safeData.items.map((item: any, i: number) => (
           <ExpertiseItem
