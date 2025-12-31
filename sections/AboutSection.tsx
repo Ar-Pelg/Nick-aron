@@ -59,7 +59,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
             </h4>
           </RevealText>
           <div className="font-serif text-4xl md:text-6xl leading-tight text-white drop-shadow-lg">
-            "<span>{safeData.philosophy_quote_start}</span> <span className="text-neutral-400">{safeData.philosophy_quote_highlight1}</span> <span>{safeData.philosophy_quote_mid}</span> <span className="text-neutral-400">{safeData.philosophy_quote_highlight2}</span> <span>{safeData.philosophy_quote_end}</span>"
+            "<span>{safeData.philosophy_quote_start}</span> <span className="text-neutral-400 italic">{safeData.philosophy_quote_highlight1}</span> <span>{safeData.philosophy_quote_mid}</span> <span className="text-neutral-400 italic">{safeData.philosophy_quote_highlight2}</span> <span>{safeData.philosophy_quote_end}</span>"
           </div>
         </div>
 
