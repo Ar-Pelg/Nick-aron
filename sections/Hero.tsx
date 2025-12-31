@@ -4,10 +4,12 @@ import ScrollMorphHero from "../components/ui/ScrollMorphHero";
 
 interface HeroProps {
   data: any;
+  projects?: any[];
+  onSelectProject?: (project: any) => void;
   isEditor: boolean;
 }
 
-export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
+export const Hero: React.FC<HeroProps> = ({ data, projects, onSelectProject, isEditor }) => {
   const targetRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -31,6 +33,8 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
           title={fullTitle}
           subtitle={safeContent.description}
           label={safeContent.label}
+          projects={projects}
+          onProjectClick={onSelectProject}
         />
       </section>
     );
@@ -44,6 +48,8 @@ export const Hero: React.FC<HeroProps> = ({ data, isEditor }) => {
           subtitle={safeContent.description}
           label={safeContent.label}
           scrollProgress={scrollYProgress}
+          projects={projects}
+          onProjectClick={onSelectProject}
         />
       </div>
     </section>

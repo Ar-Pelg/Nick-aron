@@ -101,7 +101,12 @@ export default function App() {
         <Navbar onOpenLab={() => setIsLabOpen(true)} />
 
         <main>
-          <Hero data={content.hero} isEditor={isEditor} />
+          <Hero
+            data={content.hero}
+            projects={content.projects}
+            onSelectProject={setSelectedProject}
+            isEditor={isEditor}
+          />
           <Expertise data={content.expertise} isEditor={isEditor} />
           <HorizontalGallery
             data={content.projects_section}

@@ -12,6 +12,7 @@ interface FlipCardProps {
     total: number;
     phase: AnimationPhase;
     target: { x: number; y: number; rotation: number; scale: number; opacity: number };
+    onClick?: () => void;
 }
 
 // --- FlipCard Component ---
@@ -24,6 +25,7 @@ function FlipCard({
     total,
     phase,
     target,
+    onClick,
 }: FlipCardProps) {
     return (
         <motion.div
@@ -50,6 +52,7 @@ function FlipCard({
                 perspective: "1000px",
             }}
             className="cursor-pointer group pointer-events-auto"
+            onClick={onClick}
         >
             <motion.div
                 className="relative h-full w-full"
@@ -77,7 +80,7 @@ function FlipCard({
                 >
                     <div className="text-center">
                         <p className="text-[6px] font-bold text-amber-500 uppercase tracking-widest mb-1">View</p>
-                        <p className="text-[8px] font-serif italic text-white">Project</p>
+                        <p className="text-[8px] font-serif italic text-white line-clamp-2">Project</p>
                     </div>
                 </div>
             </motion.div>
@@ -89,30 +92,13 @@ function FlipCard({
 const TOTAL_IMAGES = 20;
 const MAX_SCROLL = 3000; // Virtual scroll range
 
-// Architecture / Design Unsplash Images
-// Tech & Landscape Mix Unsplash Images
-const IMAGES = [
-    // Reliable Nature / Landscape / Abstract Mix (High Availability)
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80", // Sun rays in forest
-    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80", // Foggy forest
-    "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&q=80", // Dark stone texture
-    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80", // Mountain range
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Forest path
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80", // Yosemite waters
-    "https://images.unsplash.com/photo-1428908728789-d2de25dbd4e2?w=800&q=80", // Misty pine forest (Corrected)
-    "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?w=800&q=80", // Northern lights (Replacement for broken link)
-    "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=800&q=80", // Sunlight abstract
-    "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=800&q=80", // Misty trees black & white vibe
-    "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=800&q=80", // Deep forest dark
-    "https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=800&q=80", // Moody coast
-    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=800&q=80", // Mountain lake reflection
-    "https://images.unsplash.com/photo-1428515613728-6b4607e44363?w=800&q=80", // Dark water texture
-    "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800&q=80", // Forest light
-    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80", // Mountain range (Backup)
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80", // Forest path (Backup)
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80", // Yosemite waters (Backup)
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=800&q=80", // Snowy mountains night
-    "https://images.unsplash.com/photo-1439853949127-fa647821eba0?w=800&q=80", // Mountain layers
+// Fallback images if no projects provided
+const FALLBACK_IMAGES = [
+    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
+    "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&q=80",
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
 ];
 
 // Helper for linear interpolation
@@ -123,12 +109,24 @@ interface ScrollMorphHeroProps {
     subtitle: string;
     label: string;
     scrollProgress?: any; // MotionValue<number>
+    projects?: any[];
+    onProjectClick?: (project: any) => void;
 }
 
-export default function ScrollMorphHero({ title, subtitle, label, scrollProgress }: ScrollMorphHeroProps) {
+export default function ScrollMorphHero({ title, subtitle, label, scrollProgress, projects = [], onProjectClick }: ScrollMorphHeroProps) {
     const [introPhase, setIntroPhase] = useState<AnimationPhase>("scatter");
     const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // Prepare images list (fill up to TOTAL_IMAGES by looping projects)
+    const heroImages = useMemo(() => {
+        const source = (projects && projects.length > 0) ? projects : FALLBACK_IMAGES.map(img => ({ img, title: 'Project' }));
+        const result = [];
+        for (let i = 0; i < TOTAL_IMAGES; i++) {
+            result.push(source[i % source.length]);
+        }
+        return result;
+    }, [projects]);
 
     // --- Container Size ---
     useEffect(() => {
@@ -241,7 +239,7 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
 
     // --- Random Scatter Positions ---
     const scatterPositions = useMemo(() => {
-        return IMAGES.map(() => ({
+        return Array.from({ length: TOTAL_IMAGES }).map(() => ({
             x: (Math.random() - 0.5) * 1500,
             y: (Math.random() - 0.5) * 1000,
             rotation: (Math.random() - 0.5) * 180,
@@ -315,7 +313,7 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
 
                 {/* Main Container */}
                 <div className="relative flex items-center justify-center w-full h-full">
-                    {IMAGES.slice(0, TOTAL_IMAGES).map((src, i) => {
+                    {heroImages.slice(0, TOTAL_IMAGES).map((item, i) => {
                         let target = { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1 };
 
                         if (introPhase === "scatter") {
@@ -371,13 +369,17 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
                             };
                         }
 
+                        const imgSrc = item.img ? (item.img.startsWith('/public') ? item.img.substring(7) : item.img) : '';
+
                         return (
                             <FlipCard
-                                src={src}
+                                key={i}
+                                src={imgSrc}
                                 index={i}
                                 total={TOTAL_IMAGES}
                                 phase={introPhase}
                                 target={target}
+                                onClick={() => onProjectClick && onProjectClick(item)}
                             />
                         );
                     })}
