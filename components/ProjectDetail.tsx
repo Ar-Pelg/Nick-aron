@@ -16,10 +16,12 @@ export interface ProjectData {
 
 interface ProjectDetailProps {
   project: ProjectData;
+  nextProject?: ProjectData;
   onClose: () => void;
+  onNext: (project: ProjectData) => void;
 }
 
-export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onClose }) => {
+export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, nextProject, onClose, onNext }) => {
 
   // Lock body scroll when open
   useEffect(() => {
@@ -49,6 +51,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onClose }
       {/* Hero Image */}
       <div className="relative h-[70vh] w-full overflow-hidden">
         <motion.img
+          key={project.img} // Force re-render on project change
           initial={{ scale: 1.2 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
@@ -60,6 +63,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onClose }
 
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 pb-12">
           <motion.div
+            key={project.title}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
@@ -95,6 +99,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onClose }
             <motion.h3
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
               className="text-3xl md:text-5xl font-serif leading-tight mb-12"
             >
               {project.desc}
@@ -110,7 +115,9 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onClose }
             </div>
 
             <div className="mt-12">
-              <Button variant="secondary">Bezoek Website</Button>
+              <a href="mailto:hello@nickaron.com">
+                <Button variant="secondary">Plan een afspraak</Button>
+              </a>
             </div>
           </div>
         </div>
@@ -132,17 +139,19 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, onClose }
         </div>
 
         {/* Next Project Nav */}
-        <div className="mt-32 border-t border-neutral-200 pt-24 text-center">
-          <span className="text-xs uppercase tracking-widest text-neutral-400 mb-4 block">Volgend Project</span>
-          <div
-            className="inline-flex items-center gap-4 text-4xl md:text-6xl font-serif cursor-pointer hover:italic transition-all duration-300 group"
-            onClick={onClose}
-            data-cursor="Volgende"
-          >
-            <span>Terug naar overzicht</span>
-            <ArrowRight className="group-hover:translate-x-4 transition-transform duration-300" size={40} />
+        {nextProject && (
+          <div className="mt-32 border-t border-neutral-200 pt-24 text-center">
+            <span className="text-xs uppercase tracking-widest text-neutral-400 mb-4 block">Volgend Project</span>
+            <div
+              className="inline-flex items-center gap-4 text-4xl md:text-6xl font-serif cursor-pointer hover:italic transition-all duration-300 group"
+              onClick={() => onNext(nextProject)}
+              data-cursor="Volgende"
+            >
+              <span>{nextProject.title}</span>
+              <ArrowRight className="group-hover:translate-x-4 transition-transform duration-300" size={40} />
+            </div>
           </div>
-        </div>
+        )}
 
       </div>
     </motion.div>

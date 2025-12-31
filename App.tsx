@@ -120,6 +120,12 @@ export default function App() {
         {selectedProject && (
           <ProjectDetail
             project={selectedProject}
+            nextProject={(() => {
+              const currentIndex = content.projects.findIndex((p: any) => p.title === selectedProject.title);
+              const nextIndex = (currentIndex + 1) % content.projects.length;
+              return content.projects[nextIndex];
+            })()}
+            onNext={(next) => setSelectedProject(next)}
             onClose={() => setSelectedProject(null)}
           />
         )}
