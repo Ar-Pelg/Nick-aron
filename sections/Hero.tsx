@@ -19,12 +19,11 @@ export const Hero: React.FC<HeroProps> = ({ data, projects, onSelectProject, isE
   // Fallback
   const safeContent = data || {
     label: "digital atelier",
-    title_start: "Nick & Aron",
-    title_italic: "",
+    title_start: "N&A",
     description: "Wij bouwen digitale ervaringen die raken.",
   };
 
-  const fullTitle = `${safeContent.title_start || ''} ${safeContent.title_italic || ''}`.trim();
+  const fullTitle = `${safeContent.title_start || ''}`.trim();
 
   if (isEditor) {
     return (

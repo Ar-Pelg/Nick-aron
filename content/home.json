@@ -1,9 +1,8 @@
 {
   "url": "/",
   "hero": {
-    "label": "N&A",
-    "title_start": "Nick & Aron",
-    "title_italic": "Creative Studio",
+    "label": "Creative Studio",
+    "title_start": "N&A",
     "description": "Wij bouwen digitale ervaringen die raken."
   },
   "expertise": {
