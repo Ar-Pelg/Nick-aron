@@ -9,7 +9,7 @@ interface ExpertiseProps {
 }
 
 export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
-  const sectionRef = useRef<HTMLElement>(null);
+  const itemsRef = useRef<HTMLDivElement>(null);
 
   const safeData = data || {
     title_small: "Onze Expertise",
@@ -18,11 +18,7 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
   };
 
   return (
-    <section ref={sectionRef} className="bg-[#FAFAFA] pt-32 pb-12 relative overflow-hidden" id="expertise">
-      <TracingLine
-        containerRef={sectionRef as React.RefObject<HTMLElement>}
-        className="absolute inset-0 pointer-events-none hidden md:block z-0"
-      />
+    <section className="bg-[#FAFAFA] pt-32 pb-12 relative overflow-hidden" id="expertise">
 
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 mb-20 relative z-10">
         <h2
@@ -39,7 +35,11 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
         </RevealText>
       </div>
 
-      <div className="relative z-10">
+      <div ref={itemsRef} className="relative z-10">
+        <TracingLine
+          containerRef={itemsRef}
+          className="absolute inset-0 pointer-events-none hidden md:block z-0"
+        />
         {safeData.items && safeData.items.map((item: any, i: number) => (
           <ExpertiseItem
             key={i}
