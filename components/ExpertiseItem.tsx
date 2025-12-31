@@ -16,6 +16,8 @@ export const ExpertiseItem: React.FC<ExpertiseItemProps> = ({ number, title, des
     <div
       className="cursor-pointer group transition-colors duration-500 hover:bg-white"
       onClick={() => setIsOpen(!isOpen)}
+      data-cursor={isOpen ? "Sluit" : "Open"}
+    >
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 border-t border-neutral-200 py-12 grid md:grid-cols-[12rem_1fr] gap-8 items-start transition-colors duration-500">
         <span className="text-xs font-mono text-neutral-400 mt-2">0{number}</span>
         <div className="min-w-0">
