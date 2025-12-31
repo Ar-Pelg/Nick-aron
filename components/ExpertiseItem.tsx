@@ -16,11 +16,9 @@ export const ExpertiseItem: React.FC<ExpertiseItemProps> = ({ number, title, des
     <div
       className="cursor-pointer group transition-colors duration-500 hover:bg-white"
       onClick={() => setIsOpen(!isOpen)}
-      data-cursor={isOpen ? "Sluit" : "Open"}
-    >
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 border-t border-neutral-200 py-12 flex flex-col md:flex-row gap-8 md:items-start transition-colors duration-500">
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 border-t border-neutral-200 py-12 grid md:grid-cols-[12rem_1fr] gap-8 items-start transition-colors duration-500">
         <span className="text-xs font-mono text-neutral-400 mt-2">0{number}</span>
-        <div className="flex-1">
+        <div className="min-w-0">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-serif text-3xl md:text-5xl text-neutral-900 group-hover:italic transition-all duration-300">{title}</h3>
             <span className={`p-2 rounded-full border border-neutral-200 transition-transform duration-500 ${isOpen ? 'rotate-45' : 'rotate-0'}`}>
@@ -55,6 +53,6 @@ export const ExpertiseItem: React.FC<ExpertiseItemProps> = ({ number, title, des
           )}
         </div>
       </div>
-    </div>
+    </div >
   );
 };
