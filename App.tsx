@@ -98,7 +98,6 @@ export default function App() {
 
       {/* Main Content Wrapper - Slides over the Footer */}
       <div className="relative z-10 bg-[#FAFAFA] mb-[80vh] shadow-2xl rounded-b-3xl">
-        <TracingLine />
         <Navbar onOpenLab={() => setIsLabOpen(true)} />
 
         <main>

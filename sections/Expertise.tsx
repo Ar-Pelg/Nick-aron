@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ExpertiseItem } from '../components/ExpertiseItem';
 import { RevealText } from '../components/RevealText';
+import { TracingLine } from '../components/TracingLine';
 
 interface ExpertiseProps {
   data: any;
@@ -8,6 +9,8 @@ interface ExpertiseProps {
 }
 
 export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
+  const sectionRef = useRef<HTMLElement>(null);
+
   const safeData = data || {
     title_small: "Onze Expertise",
     title_large: "",
@@ -15,8 +18,13 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
   };
 
   return (
-    <section className="bg-[#FAFAFA] pt-32 pb-12" id="expertise">
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 mb-20">
+    <section ref={sectionRef} className="bg-[#FAFAFA] pt-32 pb-12 relative overflow-hidden" id="expertise">
+      <TracingLine
+        containerRef={sectionRef as React.RefObject<HTMLElement>}
+        className="absolute inset-0 pointer-events-none hidden md:block z-0"
+      />
+
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 mb-20 relative z-10">
         <h2
           className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-8"
         >
@@ -31,7 +39,7 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
         </RevealText>
       </div>
 
-      <div>
+      <div className="relative z-10">
         {safeData.items && safeData.items.map((item: any, i: number) => (
           <ExpertiseItem
             key={i}

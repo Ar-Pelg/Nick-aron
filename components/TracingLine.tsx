@@ -1,12 +1,21 @@
 import React from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 
-export const TracingLine = () => {
-  const { scrollYProgress } = useScroll();
+interface TracingLineProps {
+  containerRef?: React.RefObject<HTMLElement>;
+  className?: string;
+}
+
+export const TracingLine: React.FC<TracingLineProps> = ({ containerRef, className = "fixed inset-0 z-0 pointer-events-none hidden md:block overflow-hidden" }) => {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
   const pathLength = useSpring(scrollYProgress, { stiffness: 400, damping: 90 });
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none hidden md:block overflow-hidden">
+    <div className={className}>
       <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
         <motion.path
           d="M 5 0 L 5 100"
