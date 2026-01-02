@@ -22,40 +22,49 @@ export const Preloader = ({ onComplete }: { onComplete: () => void }) => {
 
     return (
         <motion.div
-            initial={{ y: 0 }}
-            exit={{ y: "-100%" }}
-            transition={{ duration: 1.2, ease: [0.85, 0, 0.15, 1] }}
-            className="fixed inset-0 z-[100] bg-neutral-900 flex flex-col items-center justify-center text-white"
+            className="fixed inset-0 z-[100] flex flex-col pointer-events-none"
+            initial="initial"
+            exit="exit"
         >
-            <div className="absolute top-12 left-12 overflow-hidden h-6">
-                <motion.div
-                    animate={{ y: [0, -24, -48, -72, -96] }}
-                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="text-[10px] uppercase tracking-[0.5em] text-neutral-500"
-                >
-                    {words.map((w) => <div key={w} className="h-6">{w}</div>)}
-                </motion.div>
-            </div>
-
-            <div className="relative">
-                <motion.span
-                    className="text-[20vw] font-serif leading-none tabular-nums"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                >
-                    {counter}
-                </motion.span>
-                <span className="text-xl font-serif absolute -top-4 -right-8 opacity-40">%</span>
-            </div>
-
-            <div className="absolute bottom-12 w-full max-w-xs px-12">
-                <div className="h-[1px] w-full bg-white/10 relative overflow-hidden">
+            {/* Top Curtain */}
+            <motion.div
+                className="relative w-full h-1/2 bg-neutral-900 flex items-end justify-center pb-2 border-b border-white/10"
+                initial={{ y: 0 }}
+                exit={{ y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
+            >
+                <div className="overflow-hidden h-6 mb-8">
                     <motion.div
-                        className="absolute inset-y-0 left-0 bg-white"
-                        style={{ width: `${counter}%` }}
-                    />
+                        animate={{ y: [0, -24, -48, -72, -96] }}
+                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                        className="text-[10px] uppercase tracking-[0.5em] text-neutral-500 text-center"
+                    >
+                        {words.map((w) => <div key={w} className="h-6">{w}</div>)}
+                    </motion.div>
                 </div>
-            </div>
+            </motion.div>
+
+            {/* Bottom Curtain */}
+            <motion.div
+                className="relative w-full h-1/2 bg-neutral-900 flex items-start justify-center pt-2 border-t border-white/10"
+                initial={{ y: 0 }}
+                exit={{ y: "100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
+            >
+                <div className="relative mt-8">
+                    <motion.span
+                        className="text-[10vw] font-serif leading-none tabular-nums text-white"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                    >
+                        {counter}
+                    </motion.span>
+                    <div className="absolute top-full left-0 w-full h-[1px] bg-white/10 mt-4 overflow-hidden">
+                        <motion.div
+                            className="absolute inset-y-0 left-0 bg-white"
+                            style={{ width: `${counter}%` }}
+                        />
+                    </div>
+                </div>
+            </motion.div>
         </motion.div>
     );
 };

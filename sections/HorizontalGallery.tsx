@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '../components/Button';
 import { ProjectData } from '../components/ProjectDetail';
+import { useScrollVelocity } from '../hooks/useScrollVelocity';
 
 interface HorizontalGalleryProps {
   projects: ProjectData[];
@@ -50,6 +51,10 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
 
   const x = useTransform(scrollYProgress, [0, 1], ["0%", scrollRange]);
 
+  // Velocity Skew
+  const smoothVelocity = useScrollVelocity();
+  const skewX = useTransform(smoothVelocity, [-1000, 1000], [-5, 5]);
+
   const safeData = data || {
     title_small: "Geselecteerd Werk",
     title_large_start: "Esthetiek ontmoet",
@@ -71,9 +76,11 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
 
         <motion.div style={{ x }} className="flex gap-12 pl-6 md:pl-12 will-change-transform">
           <div className="flex-shrink-0 w-[80vw] md:w-[40vw] flex flex-col justify-center pr-20">
-            <h3 className="font-serif text-5xl md:text-7xl mb-8 leading-none">
-              <span>{safeData.title_large_start}</span> <br />
-              <span className="italic text-neutral-500">{safeData.title_large_italic}</span>
+            <h3 className="font-serif text-5xl md:text-7xl mb-8 leading-none perspective-500">
+              <motion.div style={{ skewX }}>
+                <span>{safeData.title_large_start}</span> <br />
+                <span className="italic text-neutral-500">{safeData.title_large_italic}</span>
+              </motion.div>
             </h3>
             <p
               className="text-neutral-400 font-light text-lg max-w-md mb-8"
