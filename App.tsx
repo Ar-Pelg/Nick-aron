@@ -138,6 +138,7 @@ export default function App() {
       <AnimatePresence>
         {selectedProject && (
           <ProjectDetail
+            key={selectedProject.title}
             project={selectedProject}
             nextProject={(() => {
               const currentIndex = content.projects.findIndex((p: any) => p.title === selectedProject.title);
