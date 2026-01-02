@@ -64,7 +64,8 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
   };
 
   // Parallax Effect
-  const parallaxX = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+  // Reduced range to ensure image stays within frame (Scale 1.25 provides 12.5% buffer, we move 10%)
+  const parallaxX = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
   return (
     <section ref={targetRef} className="relative h-[300vh] bg-[#161617] text-white" id="projecten">
@@ -108,8 +109,8 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
                 alt={project.title}
                 loading="lazy"
                 decoding="async"
-                style={{ x: parallaxX, scale: 1.2 }}
-                whileHover={{ scale: 1.3 }}
+                style={{ x: parallaxX, scale: 1.25 }}
+                whileHover={{ scale: 1.35 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
                 className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100"
               />
