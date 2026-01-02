@@ -13,7 +13,7 @@ export const Hero: React.FC<HeroProps> = ({ data, projects, onSelectProject, isE
   const targetRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end start"]
   });
 
   // Fallback
