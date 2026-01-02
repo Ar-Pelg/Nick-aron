@@ -12,6 +12,10 @@ import { Footer } from './sections/Footer';
 import { ProjectDetail, ProjectData } from './components/ProjectDetail';
 import { Preloader } from './components/Preloader';
 import contentData from './content/home.json';
+import { useScroll } from 'framer-motion';
+
+// Lazy load the heavy 3D scene
+const ThreeCityScene = React.lazy(() => import('./three/ThreeCityScene').then(module => ({ default: module.ThreeCityScene })));
 
 export default function App() {
   const [selectedProject, setSelectedProject] = useState<ProjectData | null>(null);
@@ -100,6 +104,9 @@ export default function App() {
     };
   }, []);
 
+  // Global Scroll for 3D Scene
+  const { scrollYProgress } = useScroll();
+
   return (
     <div className={`min-h-screen text-white selection:bg-white selection:text-neutral-900 font-sans antialiased`}>
       <AnimatePresence>
@@ -110,8 +117,15 @@ export default function App() {
 
       <CustomCursor />
 
+      {/* Global 3D Background */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <React.Suspense fallback={<div className="w-full h-full bg-[#161617]" />}>
+          <ThreeCityScene scrollProgress={scrollYProgress} />
+        </React.Suspense>
+      </div>
+
       {/* Main Content Wrapper - Slides over the Footer */}
-      <div className="relative z-10 bg-[#161617] mb-[80vh] shadow-2xl rounded-b-3xl">
+      <div className="relative z-10 bg-transparent mb-[80vh] shadow-2xl rounded-b-3xl">
         <Navbar onOpenLab={() => { }} />
 
         <main>
