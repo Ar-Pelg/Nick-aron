@@ -102,7 +102,6 @@ export default function App() {
 
   return (
     <div className={`min-h-screen text-white selection:bg-white selection:text-neutral-900 font-sans antialiased`}>
-      <div className="noise-overlay" />
       <AnimatePresence>
         {isLoading && !isEditor && (
           <Preloader onComplete={() => setIsLoading(false)} />
