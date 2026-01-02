@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Lenis from 'lenis';
 import { AnimatePresence } from 'framer-motion';
 import { CustomCursor } from './components/CustomCursor';
 import { TracingLine } from './components/TracingLine';
@@ -75,8 +76,33 @@ export default function App() {
     };
   }, []);
 
+  // Smooth Scroll (Lenis)
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      smoothTouch: false,
+      touchMultiplier: 2,
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
   return (
     <div className={`min-h-screen text-neutral-900 selection:bg-neutral-900 selection:text-white font-sans antialiased`}>
+      <div className="noise-overlay" />
       <AnimatePresence>
         {isLoading && !isEditor && (
           <Preloader onComplete={() => setIsLoading(false)} />
