@@ -63,6 +63,9 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
     scroll_text: "Scroll om te ontdekken"
   };
 
+  // Parallax Effect
+  const parallaxX = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
+
   return (
     <section ref={targetRef} className="relative h-[300vh] bg-[#161617] text-white" id="projecten">
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
@@ -100,12 +103,15 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
               data-cursor="Bekijk Case"
               onClick={() => onSelectProject(project)}
             >
-              <img
+              <motion.img
                 src={project.img.startsWith('/public') ? project.img.substring(7) : project.img}
                 alt={project.title}
                 loading="lazy"
                 decoding="async"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-60 group-hover:opacity-100"
+                style={{ x: parallaxX, scale: 1.2 }}
+                whileHover={{ scale: 1.3 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-100"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full">
