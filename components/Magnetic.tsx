@@ -17,7 +17,7 @@ export const Magnetic: React.FC<MagneticProps> = ({ children }) => {
         const { left, top, width, height } = ref.current.getBoundingClientRect();
         const x = clientX - (left + width / 2);
         const y = clientY - (top + height / 2);
-        setPosition({ x: x * 0.35, y: y * 0.35 });
+        setPosition({ x: x * 0.8, y: y * 0.8 });
     };
 
     const handleMouseLeave = () => {

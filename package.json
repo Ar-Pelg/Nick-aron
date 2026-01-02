@@ -13,6 +13,7 @@
     "@splinetool/runtime": "^1.12.28",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.26",
+    "lenis": "^1.3.17",
     "lucide-react": "^0.559.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",

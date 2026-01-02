@@ -53,7 +53,7 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
 
   // Velocity Skew
   const smoothVelocity = useScrollVelocity();
-  const skewX = useTransform(smoothVelocity, [-1000, 1000], [-5, 5]);
+  const skewX = useTransform(smoothVelocity, [-1000, 1000], [-15, 15]);
 
   const safeData = data || {
     title_small: "Geselecteerd Werk",
