@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from '../components/Button';
 import { ProjectData } from '../components/ProjectDetail';
 import { useScrollVelocity } from '../hooks/useScrollVelocity';
+import { TextScramble } from '../components/TextScramble';
 
 interface HorizontalGalleryProps {
   projects: ProjectData[];
@@ -81,8 +82,12 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
         <motion.div style={{ x }} className="flex gap-12 pl-6 md:pl-12 will-change-transform">
           <div className="flex-shrink-0 w-[80vw] md:w-[40vw] flex flex-col justify-center pr-20">
             <h3 className="font-serif text-5xl md:text-7xl mb-8 leading-none perspective-500">
+              import {TextScramble} from '../components/TextScramble';
+
+              // ... inside component ...
+
               <motion.div style={{ skewX }}>
-                <span>{safeData.title_large_start}</span> <br />
+                <TextScramble className="block">{safeData.title_large_start}</TextScramble>
                 <span className="italic text-neutral-500">{safeData.title_large_italic}</span>
               </motion.div>
             </h3>
@@ -105,6 +110,7 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
               onClick={() => onSelectProject(project)}
             >
               <motion.img
+                layoutId={project.title}
                 src={project.img.startsWith('/public') ? project.img.substring(7) : project.img}
                 alt={project.title}
                 loading="lazy"
