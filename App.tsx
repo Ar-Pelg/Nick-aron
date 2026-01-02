@@ -100,6 +100,24 @@ export default function App() {
     };
   }, []);
 
+  // Dynamic Title (Come back message)
+  useEffect(() => {
+    const originalTitle = document.title;
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        document.title = "We missen je... 👀";
+      } else {
+        document.title = originalTitle;
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      document.title = originalTitle; // Restore on unmount
+    };
+  }, []);
+
   return (
     <div className={`min-h-screen text-white selection:bg-white selection:text-neutral-900 font-sans antialiased`}>
       <AnimatePresence>
