@@ -64,7 +64,7 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
   };
 
   return (
-    <section ref={targetRef} className="relative h-[300vh] bg-transparent text-white" id="projecten">
+    <section ref={targetRef} className="relative h-[300vh] bg-[#161617] text-white" id="projecten">
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
         <div className="absolute top-12 left-6 md:left-12 z-20">
           <h2

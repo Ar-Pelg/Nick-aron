@@ -4,7 +4,8 @@ import { useScroll } from 'framer-motion';
 import { RevealText } from '../components/RevealText';
 
 // Dynamic import: Only load the heavy 3D code when this component is actually needed/rendered
-// Dynamic import removed - lifted to App.tsx
+// Dynamic import: Only load the heavy 3D code when this component is actually needed/rendered
+const ThreeCityScene = React.lazy(() => import('../three/ThreeCityScene').then(module => ({ default: module.ThreeCityScene })));
 
 interface AboutSectionProps {
   data: any;
@@ -29,9 +30,14 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
   };
 
   return (
-    <section ref={targetRef} className="bg-transparent h-[250vh] relative" id="studio">
+    <section ref={targetRef} className="bg-[#161617] h-[250vh] relative" id="studio">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Background 3D Scene - Now Global in App.tsx */}
+        {/* Background 3D Scene - Full Screen Sticky */}
+        <div className="absolute inset-0 z-0">
+          <Suspense fallback={<div className="w-full h-full bg-[#161617]" />}>
+            <ThreeCityScene scrollProgress={scrollYProgress} />
+          </Suspense>
+        </div>
 
         {/* Overlay Content - Scrolling over the scene */}
         <div className={`absolute inset-0 z-10 ${!isEditor ? 'pointer-events-none' : ''}`}>
