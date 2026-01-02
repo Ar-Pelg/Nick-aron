@@ -28,7 +28,7 @@ export const Preloader = ({ onComplete }: { onComplete: () => void }) => {
         >
             {/* Top Curtain */}
             <motion.div
-                className="relative w-full h-1/2 bg-neutral-900 flex items-end justify-center pb-2 border-b border-white/10"
+                className="relative w-full h-1/2 bg-[#161617] flex items-end justify-center pb-2 border-b border-white/10"
                 initial={{ y: 0 }}
                 exit={{ y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
             >
@@ -45,7 +45,7 @@ export const Preloader = ({ onComplete }: { onComplete: () => void }) => {
 
             {/* Bottom Curtain */}
             <motion.div
-                className="relative w-full h-1/2 bg-neutral-900 flex items-start justify-center pt-2 border-t border-white/10"
+                className="relative w-full h-1/2 bg-[#161617] flex items-start justify-center pt-2 border-t border-white/10"
                 initial={{ y: 0 }}
                 exit={{ y: "100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
             >

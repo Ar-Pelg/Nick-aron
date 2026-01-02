@@ -29,7 +29,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
   };
 
   return (
-    <section ref={targetRef} className="bg-neutral-900 h-[250vh] relative" id="studio">
+    <section ref={targetRef} className="bg-[#161617] h-[250vh] relative" id="studio">
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* Background 3D Scene - Full Screen Sticky */}
         <div className="absolute inset-0 z-0">
@@ -50,7 +50,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ data, isEditor }) =>
       <div className={`relative z-10 text-white px-6 md:px-16 py-32 flex flex-col items-center justify-center min-h-screen ${!isEditor ? 'pointer-events-none' : ''}`}>
 
         {/* GLASS CARD 1: Philosophy */}
-        <div className={`max-w-4xl mx-auto mb-24 p-12 bg-neutral-900/40 backdrop-blur-md border border-white/10 shadow-2xl ${!isEditor ? 'pointer-events-auto' : ''}`}>
+        <div className={`max-w-4xl mx-auto mb-24 p-12 bg-[#161617]/40 backdrop-blur-md border border-white/10 shadow-2xl ${!isEditor ? 'pointer-events-auto' : ''}`}>
           <RevealText disabled={isEditor}>
             <h4
               className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-8 border-b border-white/10 pb-4 inline-block"
