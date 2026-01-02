@@ -37,13 +37,14 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, nextProje
       animate={{ y: 0 }}
       exit={{ y: "100%" }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-      className="fixed inset-0 z-[60] bg-[#FAFAFA] overflow-y-auto overflow-x-hidden"
+      className="fixed inset-0 z-[60] bg-[#161617] text-white overflow-y-auto overflow-x-hidden"
       data-lenis-prevent
+      onWheel={(e) => e.stopPropagation()}
     >
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="fixed top-8 right-8 z-50 w-16 h-16 rounded-full bg-neutral-900 text-white flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer mix-blend-difference"
+        className="fixed top-8 right-8 z-50 w-16 h-16 rounded-full bg-white text-neutral-900 flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer"
         data-cursor="Sluit"
       >
         <X size={24} />
@@ -82,17 +83,17 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, nextProje
         {/* Project Info Grid */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24 mb-32">
           <div className="md:col-span-4 space-y-8">
-            <div className="border-t border-neutral-200 pt-4">
+            <div className="border-t border-white/10 pt-4">
               <span className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Klant</span>
-              <span className="text-lg text-neutral-900">{project.client}</span>
+              <span className="text-lg text-white">{project.client}</span>
             </div>
-            <div className="border-t border-neutral-200 pt-4">
+            <div className="border-t border-white/10 pt-4">
               <span className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Rol</span>
-              <span className="text-lg text-neutral-900">{project.role}</span>
+              <span className="text-lg text-white">{project.role}</span>
             </div>
-            <div className="border-t border-neutral-200 pt-4">
+            <div className="border-t border-white/10 pt-4">
               <span className="text-xs text-neutral-400 uppercase tracking-widest block mb-2">Jaar</span>
-              <span className="text-lg text-neutral-900">{project.year}</span>
+              <span className="text-lg text-white">{project.year}</span>
             </div>
           </div>
 
@@ -117,7 +118,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, nextProje
 
             <div className="mt-12">
               <a href="mailto:hello@nickaron.com">
-                <Button variant="secondary">Plan een afspraak</Button>
+                <Button variant="primary">Plan een afspraak</Button>
               </a>
             </div>
           </div>
@@ -141,7 +142,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, nextProje
 
         {/* Next Project Nav */}
         {nextProject && (
-          <div className="mt-32 border-t border-neutral-200 pt-24 text-center">
+          <div className="mt-32 border-t border-white/10 pt-24 text-center">
             <span className="text-xs uppercase tracking-widest text-neutral-400 mb-4 block">Volgend Project</span>
             <div
               className="inline-flex items-center gap-4 text-4xl md:text-6xl font-serif cursor-pointer hover:italic transition-all duration-300 group"
