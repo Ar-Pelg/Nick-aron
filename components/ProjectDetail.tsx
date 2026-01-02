@@ -38,6 +38,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, nextProje
       exit={{ y: "100%" }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
       className="fixed inset-0 z-[60] bg-[#FAFAFA] overflow-y-auto overflow-x-hidden"
+      data-lenis-prevent
     >
       {/* Close Button */}
       <button
