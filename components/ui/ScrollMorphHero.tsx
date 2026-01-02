@@ -13,6 +13,7 @@ interface FlipCardProps {
     phase: AnimationPhase;
     target: { x: number; y: number; rotation: number; scale: number; opacity: number };
     onClick?: () => void;
+    key?: React.Key;
 }
 
 
@@ -270,6 +271,9 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
     const contentOpacity = useTransform(smoothMorph, [0.8, 1], [0, 1]);
     const contentY = useTransform(smoothMorph, [0.8, 1], [20, 0]);
 
+    // 3. Text Explode Effect
+    const textSpacing = useTransform(virtualScroll, [0, 800], ["-0.02em", "0.2em"]);
+
     return (
         <div ref={containerRef} className="relative w-full h-full min-h-screen">
             <div className="flex h-full w-full flex-col items-center justify-center perspective-1000">
@@ -286,6 +290,7 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
                         initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
                         animate={introPhase === "circle" && morphValue < 0.5 ? { opacity: 1 - morphValue * 2, y: 0, filter: "blur(0px)" } : { opacity: 0, filter: "blur(10px)" }}
                         transition={{ duration: 1 }}
+                        style={{ letterSpacing: textSpacing }} // Kinetic Explode
                         className="font-serif text-5xl md:text-8xl leading-tight text-white tracking-tight"
                     >
                         {title}

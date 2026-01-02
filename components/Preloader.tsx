@@ -3,22 +3,35 @@ import { motion } from 'framer-motion';
 
 export const Preloader = ({ onComplete }: { onComplete: () => void }) => {
     const [counter, setCounter] = useState(0);
+    const [currentWord, setCurrentWord] = useState("Concept");
+
+    const words = [
+        { text: "Concept", trigger: 0 },
+        { text: "Strategy", trigger: 25 },
+        { text: "Design", trigger: 50 },
+        { text: "Development", trigger: 75 },
+        { text: "Experience", trigger: 90 }
+    ];
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCounter((prev) => {
-                if (prev >= 100) {
+                const next = prev + 1;
+                if (next >= 100) {
                     clearInterval(timer);
                     setTimeout(onComplete, 800);
                     return 100;
                 }
-                return prev + Math.floor(Math.random() * 5) + 1;
+
+                // Update word based on progress
+                const foundWord = [...words].reverse().find(w => next >= w.trigger);
+                if (foundWord) setCurrentWord(foundWord.text);
+
+                return next;
             });
-        }, 40);
+        }, 30);
         return () => clearInterval(timer);
     }, [onComplete]);
-
-    const words = ["VISIE", "AMBACHT", "ARCHITECTUUR", "DIGITAAL", "ATELIER"];
 
     return (
         <motion.div
@@ -32,13 +45,15 @@ export const Preloader = ({ onComplete }: { onComplete: () => void }) => {
                 initial={{ y: 0 }}
                 exit={{ y: "-100%", transition: { duration: 0.8, ease: [0.76, 0, 0.24, 1] } }}
             >
-                <div className="overflow-hidden h-6 mb-8">
+                <div className="overflow-hidden h-8 mb-8">
                     <motion.div
-                        animate={{ y: [0, -24, -48, -72, -96] }}
-                        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                        className="text-[10px] uppercase tracking-[0.5em] text-neutral-500 text-center"
+                        key={currentWord}
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -20, opacity: 0 }}
+                        className="text-xs uppercase tracking-[0.5em] text-neutral-500 text-center font-bold"
                     >
-                        {words.map((w) => <div key={w} className="h-6">{w}</div>)}
+                        {currentWord}
                     </motion.div>
                 </div>
             </motion.div>
@@ -57,12 +72,6 @@ export const Preloader = ({ onComplete }: { onComplete: () => void }) => {
                     >
                         {counter}
                     </motion.span>
-                    <div className="absolute top-full left-0 w-full h-[1px] bg-white/10 mt-4 overflow-hidden">
-                        <motion.div
-                            className="absolute inset-y-0 left-0 bg-white"
-                            style={{ width: `${counter}%` }}
-                        />
-                    </div>
                 </div>
             </motion.div>
         </motion.div>
