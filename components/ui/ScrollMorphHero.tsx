@@ -15,6 +15,7 @@ interface FlipCardProps {
     onClick?: () => void;
 }
 
+
 // --- FlipCard Component ---
 const IMG_WIDTH = 60;  // Reduced from 100
 const IMG_HEIGHT = 85; // Reduced from 140
@@ -205,7 +206,8 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
     }, [internalScroll, scrollProgress]);
 
     // 1. Morph Progress: 0 (Circle) -> 1 (Bottom Arc)
-    const morphProgress = useTransform(virtualScroll, [0, 1000], [0, 1]);
+    // Extended range to [0, 2500] so it starts reversing much earlier when scrolling up
+    const morphProgress = useTransform(virtualScroll, [0, 2500], [0, 1]);
     const smoothMorph = useSpring(morphProgress, { stiffness: 40, damping: 20 });
 
     // 2. Scroll Rotation
