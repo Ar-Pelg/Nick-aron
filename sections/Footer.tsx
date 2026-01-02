@@ -1,7 +1,5 @@
 import React from 'react';
 import { Magnetic } from '../components/Magnetic';
-import { SplineScene } from "@/components/ui/spline";
-import { Spotlight } from "@/components/ui/spotlight";
 
 interface FooterProps {
    data: any;
@@ -34,27 +32,11 @@ export const Footer: React.FC<FooterProps> = ({ data, isEditor }) => {
 
    return (
       <footer
-         className="fixed bottom-0 left-0 w-full bg-[#111111] text-white -z-10 h-[80vh] flex flex-col justify-between px-6 md:px-12 py-12 overflow-hidden"
+         className="fixed bottom-0 left-0 w-full bg-[#111111] text-white -z-10 h-[80vh] flex flex-col justify-between px-6 md:px-12 py-12"
          id="contact"
       >
-         {/* Spotlight Effect */}
-         <Spotlight
-            className="-top-40 left-0 md:left-60 md:-top-20 z-0 opacity-50 pointer-events-none"
-            fill="white"
-         />
-
-         {/* Spline Bot - Layered Behind/Beside */}
-         <div className="absolute inset-0 z-0 pointer-events-none opacity-40 md:opacity-100 mix-blend-screen md:mix-blend-normal">
-            <div className="w-full h-full md:w-1/2 md:ml-auto relative top-20 md:top-0 scale-125 md:scale-100 origin-center md:origin-right">
-               <SplineScene
-                  scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                  className="w-full h-full"
-               />
-            </div>
-         </div>
-
          {/* Top Section */}
-         <div className="flex justify-between items-start w-full relative z-10">
+         <div className="flex justify-between items-start w-full">
             <div className="flex flex-col gap-2">
                <span className="text-neutral-500 uppercase tracking-wider text-sm">Drop us a line</span>
                <Magnetic>
@@ -84,15 +66,15 @@ export const Footer: React.FC<FooterProps> = ({ data, isEditor }) => {
          </div>
 
          {/* Middle - Giant Text */}
-         <div className="flex-grow flex items-center justify-start pointer-events-none select-none overflow-hidden relative z-10">
-            <h1 className="text-[15vw] leading-[0.8] font-serif tracking-tighter text-left opacity-90 whitespace-nowrap drop-shadow-2xl">
+         <div className="flex-grow flex items-center justify-center pointer-events-none select-none overflow-hidden">
+            <h1 className="text-[15vw] leading-[0.8] font-serif tracking-tighter text-center opacity-20 md:opacity-100 whitespace-nowrap">
                <span className="block">{safeData.title_start}</span>
-               <span className="block italic font-light text-neutral-400">{safeData.title_italic}</span>
+               <span className="block italic font-light">{safeData.title_italic}</span>
             </h1>
          </div>
 
          {/* Bottom Bar */}
-         <div className="flex flex-col md:flex-row justify-between items-end md:items-center w-full border-t border-white/10 pt-8 gap-4 relative z-10">
+         <div className="flex flex-col md:flex-row justify-between items-end md:items-center w-full border-t border-white/10 pt-8 gap-4">
             <div className="flex gap-8 items-center">
                <div className="flex flex-col">
                   <span className="text-xs text-neutral-500 uppercase tracking-widest">Version</span>
