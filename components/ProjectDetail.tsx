@@ -51,7 +51,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ project, nextProje
       {/* Hero Image */}
       <div className="relative h-[70vh] w-full overflow-hidden">
         <motion.img
-          layoutId={project.title}
           key={project.img} // Force re-render on project change
           initial={{ scale: 1.2 }}
           animate={{ scale: 1 }}
