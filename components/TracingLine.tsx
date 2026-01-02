@@ -19,13 +19,13 @@ export const TracingLine: React.FC<TracingLineProps> = ({ containerRef, classNam
       <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
         <motion.path
           d="M 5 0 L 5 100"
-          stroke="#E5E5E5"
+          stroke="#333333"
           strokeWidth="0.1"
           fill="none"
         />
         <motion.path
           d="M 5 0 L 5 100"
-          stroke="#171717"
+          stroke="#FFFFFF"
           strokeWidth="0.15"
           fill="none"
           style={{ pathLength }}

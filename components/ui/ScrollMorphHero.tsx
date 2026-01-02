@@ -275,7 +275,7 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
                 {/* Intro Text */}
                 <div className="absolute z-0 flex flex-col items-center justify-center text-center pointer-events-none top-1/2 -translate-y-1/2 px-4">
                     <span
-                        className="inline-block py-1 px-3 border border-neutral-200 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white"
+                        className="inline-block py-1 px-3 border border-white/10 rounded-full text-[10px] uppercase tracking-widest mb-6 bg-white/5 text-white"
                         style={{ opacity: introPhase === "circle" && morphValue < 0.5 ? 1 : 0, transition: 'opacity 0.5s' }}
                     >
                         {label}
@@ -284,7 +284,7 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
                         initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
                         animate={introPhase === "circle" && morphValue < 0.5 ? { opacity: 1 - morphValue * 2, y: 0, filter: "blur(0px)" } : { opacity: 0, filter: "blur(10px)" }}
                         transition={{ duration: 1 }}
-                        className="font-serif text-5xl md:text-8xl leading-tight text-neutral-900 tracking-tight"
+                        className="font-serif text-5xl md:text-8xl leading-tight text-white tracking-tight"
                     >
                         {title}
                     </motion.h1>
@@ -303,7 +303,7 @@ export default function ScrollMorphHero({ title, subtitle, label, scrollProgress
                     style={{ opacity: contentOpacity, y: contentY }}
                     className="absolute top-[15%] z-10 flex flex-col items-center justify-center text-center pointer-events-none px-4"
                 >
-                    <h2 className="font-serif text-4xl md:text-6xl text-neutral-900 tracking-tight mb-6">
+                    <h2 className="font-serif text-4xl md:text-6xl text-white tracking-tight mb-6">
                         {title}
                     </h2>
                     <p className="text-sm md:text-lg text-neutral-500 max-w-xl leading-relaxed font-light">

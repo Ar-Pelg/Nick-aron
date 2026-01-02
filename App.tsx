@@ -101,7 +101,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className={`min-h-screen text-neutral-900 selection:bg-neutral-900 selection:text-white font-sans antialiased`}>
+    <div className={`min-h-screen text-white selection:bg-white selection:text-neutral-900 font-sans antialiased`}>
       <div className="noise-overlay" />
       <AnimatePresence>
         {isLoading && !isEditor && (
@@ -112,7 +112,7 @@ export default function App() {
       <CustomCursor />
 
       {/* Main Content Wrapper - Slides over the Footer */}
-      <div className="relative z-10 bg-[#FAFAFA] mb-[80vh] shadow-2xl rounded-b-3xl">
+      <div className="relative z-10 bg-[#161617] mb-[80vh] shadow-2xl rounded-b-3xl">
         <Navbar onOpenLab={() => { }} />
 
         <main>

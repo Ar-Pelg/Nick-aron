@@ -18,7 +18,7 @@ export const Expertise: React.FC<ExpertiseProps> = ({ data, isEditor }) => {
   };
 
   return (
-    <section className="bg-[#FAFAFA] pt-32 pb-12 relative overflow-hidden" id="expertise">
+    <section className="bg-[#161617] pt-32 pb-12 relative overflow-hidden" id="expertise">
 
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 mb-20 relative z-10 grid md:grid-cols-[12rem_1fr] gap-8">
         <h2

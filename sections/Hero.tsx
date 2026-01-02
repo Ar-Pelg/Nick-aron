@@ -27,7 +27,7 @@ export const Hero: React.FC<HeroProps> = ({ data, projects, onSelectProject, isE
 
   if (isEditor) {
     return (
-      <section className="relative h-screen bg-[#FAFAFA] overflow-hidden">
+      <section className="relative h-screen bg-[#161617] overflow-hidden">
         <ScrollMorphHero
           title={fullTitle}
           subtitle={safeContent.description}
