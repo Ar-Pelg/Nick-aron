@@ -100,7 +100,7 @@ export const HorizontalGallery: React.FC<HorizontalGalleryProps> = ({ projects, 
           {projects && projects.map((project, i) => (
             <div
               key={i}
-              className="relative group flex-shrink-0 w-[80vw] md:w-[50vw] h-[70vh] overflow-hidden bg-neutral-800 cursor-pointer"
+              className="relative group flex-shrink-0 w-[80vw] md:w-[50vw] h-[70vh] overflow-hidden bg-neutral-800 cursor-pointer border border-white/10 hover:border-white/40 transition-all duration-500"
               data-cursor="Bekijk Case"
               onClick={() => onSelectProject(project)}
             >
