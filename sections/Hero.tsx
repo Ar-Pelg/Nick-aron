@@ -40,7 +40,7 @@ export const Hero: React.FC<HeroProps> = ({ data, projects, onSelectProject, isE
   }
 
   return (
-    <section ref={targetRef} className="relative h-[300vh] -mb-[20vh]">
+    <section ref={targetRef} className="relative h-[200vh] -mb-[20vh]">
       <div className="sticky top-0 h-screen z-40 overflow-hidden pointer-events-none">
         <ScrollMorphHero
           title={fullTitle}

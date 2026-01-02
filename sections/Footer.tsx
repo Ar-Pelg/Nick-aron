@@ -32,7 +32,7 @@ export const Footer: React.FC<FooterProps> = ({ data, isEditor }) => {
 
    return (
       <footer
-         className="fixed bottom-0 left-0 w-full bg-[#111111] text-white -z-10 h-[80vh] flex flex-col justify-between px-6 md:px-12 py-12"
+         className="fixed bottom-0 left-0 w-full bg-[#161617] text-white -z-10 h-[80vh] flex flex-col justify-between px-6 md:px-12 py-12"
          id="contact"
       >
          {/* Top Section */}

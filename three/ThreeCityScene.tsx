@@ -38,7 +38,7 @@ export const ThreeCityScene = React.memo<ThreeCitySceneProps>(({ scrollProgress 
     const height = mountRef.current.clientHeight;
 
     scene = new THREE.Scene();
-    const skyColor = 0x171717;
+    const skyColor = 0x161617;
     scene.background = new THREE.Color(skyColor);
     scene.fog = new THREE.FogExp2(skyColor, 0.025);
 
